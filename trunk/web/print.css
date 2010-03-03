@@ -1,0 +1,31 @@
+ body {
+   		font-size:12px;font-family:verdana,geneva,lucida,'lucida grande',arial,helvetica,sans-serif;
+        background-color:#fff;
+        border:0px solid;
+    }
+.sqltable{
+			margin:1em;
+			border-collapse:collapse; 
+			border-spacing:0
+		}
+		
+		.sqlth{
+			font-size:smaller;
+			font-weight: bold; 
+			background-color:  #e3e3e3;
+			border-width: 0.1em;
+			border-color:#000000;
+			border-style:solid;
+			padding:2px;
+			font-family:verdana,geneva,lucida,'lucida grande',arial,helvetica,sans-serif;
+		}
+		
+		.sqltd{
+			padding:2px;
+			border-width: 0.1em;
+			border-color:#000000;
+			border-style:solid
+		}
+		td{
+		font-size:12px;line-height: 200%;font-family:verdana,geneva,lucida,'lucida grande',arial,helvetica,sans-serif;
+	}

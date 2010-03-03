@@ -1,0 +1,93 @@
+<project name="riversql" default="js.minify" basedir=".">
+	
+		
+	<target name="js.minify" >
+	    <!-- <apply executable="java" parallel="false">
+	        <fileset dir="." includes="shBrushSql.js,shCore.js,dwloader.js"/>
+	        <arg line="-jar"/>
+	        <arg path="yuicompressor-2.4.2.jar"/>
+	        <srcfile/>
+	        <arg line="-o"/>
+	        <mapper type="glob" from="*.js" to="build/*-min.js"/>
+	        <targetfile/>
+	    </apply> -->
+		
+		
+		
+		<concat destfile="build/draw_all.js"
+		          force="yes">
+			<fileset file="wz_jsgraphics.js" />
+			<fileset file="mootools.js" />
+			<fileset file="moocanvas.js" />
+			<fileset file="draw2d_patched.js" />
+		  </concat>
+		
+		<concat destfile="build/ext_all.js"
+				          force="yes">
+					<fileset file="ext3.1.0/adapter/ext/ext-base.js" />
+					<fileset file="ext3.1.0/ext-all.js" />
+					<fileset file="ext3.1.0/Multiselect.js"/>
+					<fileset file="ext3.1.0/DDView.js"/> 
+					<fileset file="ext3.1.0/bufferview.js" />
+		 </concat>
+		
+		<apply executable="java" parallel="false">
+			        <fileset dir="build" includes="ext_all.js"/>
+			        <arg line="-jar"/>
+			        <arg path="yuicompressor-2.4.2.jar"/>
+			        <srcfile/>
+			        <arg line="-o"/>
+			        <mapper type="glob" from="*.js" to="build/*-min.js"/>
+			        <targetfile/>
+		</apply>
+		
+		<concat destfile="build/riversql_all.js"
+						          force="yes">
+							
+							<fileset file="grid_to_excel.js" />
+							<fileset file="dbgraphics.js" />
+							<fileset file="gridFactories.js" />
+							<fileset file="riversql.js"/>
+		</concat>
+		
+		<apply executable="java" parallel="false">
+			        <fileset dir="build" includes="riversql_all.js"/>
+			        <arg line="-jar"/>
+			        <arg path="yuicompressor-2.4.2.jar"/>
+			        <srcfile/>
+			        <arg line="-o"/>
+			        <mapper type="glob" from="*.js" to="build/*-min.js"/>
+			        <targetfile/>
+		</apply>
+		
+		<!--  <delete file="build/shCore-min.js"/>
+		<delete file="build/shBrushSql-min.js"/> -->
+	</target>
+	<target name="css.minify" >
+		
+		<concat destfile="ext3.1.0/resources/css/riversql.css"
+						          force="no">
+							<fileset file="ext3.1.0/resources/css/ext-all.css" />
+							<fileset file="ext3.1.0/resources/css/xtheme-gray-min.css" />
+							<fileset file="ext3.1.0/Multiselect.css"/>
+		</concat>
+				
+		<apply executable="java" parallel="false">
+							        <fileset dir="ext3.1.0/resources/css" includes="riversql.css"/>
+							        <arg line="-jar"/>
+							        <arg path="yuicompressor-2.4.2.jar"/>
+							        <srcfile/>
+							        <arg line="-o"/>
+							        <mapper type="glob" from="*.css" to="ext3.1.0/resources/css/*-min.css"/>
+							        <targetfile/>
+							   
+		</apply>
+		
+	</target>
+	
+	 <target name="war" description="Building the war file">
+		  <war destfile="c:/temp/riversql.war" webxml="WEB-INF/web.xml"> 
+	         <fileset dir=""/>
+	      </war>
+	  </target>
+</project>

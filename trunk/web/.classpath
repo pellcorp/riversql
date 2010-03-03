@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="WEB-INF/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="TOMCAT_COMMON_LIB/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/iText.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.6-20091214.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/eclipselink.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/javax.persistence_1.0.0.0_1-0-2.jar"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>
