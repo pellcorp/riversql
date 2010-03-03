@@ -1,0 +1,1 @@
+<jsp:forward page="/do?action=main" />
