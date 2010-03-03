@@ -158,7 +158,7 @@ public class DriversDAO {
 		
 		drv1=new Driver();
 		drv1.setUserName("admin");
-		drv1.setDriverClassName("COM.ibm.db2.jdbc.net.DB2Driver");
+		drv1.setDriverClassName("com.ibm.db2.jcc.DB2Driver");
 		drv1.setDriverName("IBM DB2 Net Driver");
 		drv1.setExampleUrl("jdbc:db2://<server>:<6789>/<db-name>");
 		drv1.setIconUrl("ico/ibm.ico");
