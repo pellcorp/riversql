@@ -37,9 +37,10 @@ public class GenerateDDLCreateTable implements JSONAction {
 		ISyntaxGenerator syntaxGen=DBSyntaxGeneratorFactory.getSyntaxGenerator(dbNode.getConn());
 
 		JSONObject resultObj=new JSONObject();
-		String qualifiedName="TestTable";
+		String qualifiedName=tablename;
                 
                 StringBuilder strbuilder=new StringBuilder();
+                strbuilder.append("Create Table ").append(tablename);
                 if(syntaxGen!=null){
 
                         for(int i=0;i<arrNewCols.length();i++){
@@ -88,11 +89,16 @@ public class GenerateDDLCreateTable implements JSONAction {
 		return resultObj;
 	}
 	String tableid;
+        String tablename;
 
 	public void setTableid(String tableid) {
 		this.tableid = tableid;
 	}
-	String changedCols;
+
+        public void setTablename(String tablename) {
+		this.tablename = tablename;
+	}
+
 	String newCols;
 	String newIdxs;
 	String newPKs;
@@ -102,10 +108,6 @@ public class GenerateDDLCreateTable implements JSONAction {
 	}
 	public void setNewIdxs(String newIdxs) {
 		this.newIdxs = newIdxs;
-	}
-
-	public void setChangedCols(String changedCols) {
-		this.changedCols = changedCols;
 	}
 
 	public void setNewCols(String newCols) {

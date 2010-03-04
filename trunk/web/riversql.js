@@ -3997,8 +3997,8 @@ function createTable(node) {
 			});
 
 	var dialogTabPanel = new Ext.TabPanel( {
-
-		autoTabs :true,
+		height :400,
+                autoTabs :true,
 		activeTab :0,
 		deferredRender :false,
 		border :false
@@ -4007,13 +4007,32 @@ function createTable(node) {
 	dialogTabPanel.add(columnsgrid);
 	dialogTabPanel.add(indexesgrid);
 	dialogTabPanel.add(pkgrid);
+
+        var newDBForm = new Ext.form.FormPanel( {
+		labelWidth :95,
+		onSubmit :Ext.emptyFn,
+		baseCls :'x-plain'
+	});
+        
+        var newDBName = new Ext.form.TextField( {
+            fieldLabel :'Database Name',
+            name :'dbname',
+            width :200,
+            readOnly :false,
+            allowBlank :false
+	});
+
+        newDBForm.add(newDBName);
+        newDBForm.add(dialogTabPanel);
+
 	dialog = new Ext.Window( {
 		layout :'fit',
 		width :650,
 		height :500,
 		modal :true,
-		items :dialogTabPanel,
+		items :[newDBForm],
 		title :'Create Table ' + node.text
+
 	});
 	function onClose() {
 		columnsgrid.stopEditing();
@@ -4027,6 +4046,8 @@ function createTable(node) {
 		var newIndexes = [];
 		var newPK = [];
 		var countIdx = dsIndexes.getCount();
+                Ext.example.msg('Confirmation','You clicked the "{0}" button.', newDBName.getValue());
+
 		for ( var i = 0; i < countIdx; i++) {
 			var rcIdx = dsIndexes.getAt(i);
 			if (rcIdx.get('idxnew') == true) {
@@ -4080,6 +4101,7 @@ function createTable(node) {
 			method :'POST',
 			params : {
 				tableid :node.id,
+                                tablename :newDBName.getValue(),
 				newCols :Ext.encode(newColums),
 				newIdxs :Ext.encode(newIndexes),
 				newPKs :Ext.encode(newPK)
