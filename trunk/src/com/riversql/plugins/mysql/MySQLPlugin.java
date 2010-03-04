@@ -223,6 +223,7 @@ public class MySQLPlugin implements Plugin {
 			
 			added.add(new FunctionTypeNode(catalogNode,conn));
 			added.add(new ProcedureTypeNode(catalogNode,conn));
+                        added.add(new UsersNode(catalogNode,conn));
 		}
 		return added;
 	}
