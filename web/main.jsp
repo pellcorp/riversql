@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="ext3.1.0/resources/css/riversql-min.css"/> 
 	<link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
 
-    <title>riversql</title>
+    <title>RiverSQL</title>
     
 	<style type="text/css">
 	#loading-mask{
@@ -150,7 +150,7 @@
 
 <div id="loading-mask" style=""></div>
 <div id="loading">
-    <div class="loading-indicator">Opening riversql...<br/><span style="text-align:center" id="loading-msg"></span></div>
+    <div class="loading-indicator">Opening RiverSQL...<br/><span style="text-align:center" id="loading-msg"></span></div>
 </div>
 
 
