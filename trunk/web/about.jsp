@@ -1,6 +1,6 @@
 <div id="int${pageid}">
 <div style="padding:5px">
-	<h2 >riversql <span style="font-weight:bold;color:black">[v. ${riversql_version}]</span> </h2><br/>
+	<h2 >RiverSQL <span style="font-weight:bold;color:black">[v. ${riversql_version}]</span> </h2><br/>
 <div style="padding:15px">
 <img src="icons/arrow_refresh.png" style="vertical-align:middle"/>&nbsp;
 <a class="page" href="#"  onclick="var page=(Ext.get('int${pageid}')); if(page) page.load({showLoadIndicator:false,nocache:true,url: 'do?action=about&pageid=${pageid}', scripts:true});">Refresh</a>
@@ -23,8 +23,8 @@
 	<tr><td>Max Memory</td><td>${maxMemory}</td></tr>
 <tr><td>Total Memory</td><td>${totalMemory}</td></tr>
 </table><br/>
-	<p>riversql is running on: <%=serverInfo %><br/></p>
-	<p style="color:red"><br/><b>riversql is built on top of the following software:</b><br/></p>
+	<p>RiverSQL is running on: <%=serverInfo %><br/></p>
+	<p style="color:red"><br/><b>RiverSQL is built on top of the following software:</b><br/></p>
 	<table style="border:0">
 	<tr><td><b>The user interface</b></td><td><a href="http://extjs.com/"><img alt="" style="vertical-align:middle;border:0"  src="images/extjs2.png"/></a> </td></tr>
 	<tr><td><b>The icon set</b></td><td><a href="http://www.famfamfam.com/"><img alt="" style="vertical-align:middle;border:0"  src="images/famfamfam.png"/></a> </td></tr>
