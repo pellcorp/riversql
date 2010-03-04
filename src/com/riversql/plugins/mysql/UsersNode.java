@@ -18,10 +18,8 @@ public class UsersNode extends BasePluginType implements IStructureNode{
 		ResultSet rs=null;
 		PreparedStatement ps=null;
 		try{
-			final String sql="select routine_name from information_schema.routines where routine_schema=? and routine_type='PROCEDURE' order by 1 asc";
+			final String sql="select distinct user from user";
 			ps=conn.prepareStatement(sql);
-			String owner=getOwner();
-			ps.setString(1,owner);
 			rs=ps.executeQuery();
 			while(rs.next()){
 				String oname=rs.getString(1);
@@ -50,7 +48,7 @@ public class UsersNode extends BasePluginType implements IStructureNode{
 	}
 
 	public UsersNode(CatalogNode caNode,SQLConnection conn) {
-		super("Users",caNode,conn);
+		super("User",caNode,conn);
 	}
 
 	public String getCls() {
