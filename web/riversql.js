@@ -2616,10 +2616,22 @@ function RelViewer() {
 
 				//save.relViewer = this.relViewer;
 				gridToggle.relViewer=this.relViewer;
+
+                                var saveViewer = new Ext.Toolbar.Button( {
+					cls :'x-btn-icon',
+					icon :'icons/page_white.png',
+					tooltip :'<b>Save</b><br/>Save the Graph',
+					// textareaid:textareaid,
+					handler : function() {
+                                                alert(new draw2d.XMLSerializer().toXML(workflow.getDocument()));
+					}
+				});
+
 				this.addButton(clearViewer);
 				//this.addButton(open);
 				//this.addButton(save);
 				this.addButton(gridToggle);
+                                this.addButton(saveViewer);
 			}
 		}
 	});
