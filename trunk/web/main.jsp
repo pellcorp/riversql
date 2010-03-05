@@ -155,13 +155,13 @@
 
 
 <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Core API...';</script>
-
 <script type="text/javascript" src="build/ext_all-min.js"></script>
 <!--   <script type="text/javascript" src="grid_to_excel.js"></script> -->
 <script type="text/javascript" src="build/draw_all.js"></script> 
  <script type="text/javascript" src="edit_area/edit_area_loader.js"></script> 
 <script type="text/javascript">var sqlResultPluginFactories=[];</script>
 <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Building UI...';</script>
+<script type="text/javascript" src="XMLSerializer.js"></script>
 <script type="text/javascript" src="riversql.js"></script>
 <script type="text/javascript" src="grid_to_excel.js"></script>
 <script type="text/javascript" src="dbgraphics.js"></script>
