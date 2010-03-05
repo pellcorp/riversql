@@ -90,10 +90,10 @@ function mysql_createDatabase(id){
 	
 	var config = {
 			width:400,
-			height:200,
+			height:120,
 			shadow:true,
 			minWidth:300,
-			minHeight:100,
+			minHeight:80,
 			modal: true,
 			collapsible: false,
 			closable: true,
