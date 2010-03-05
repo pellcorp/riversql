@@ -60,12 +60,49 @@ public class GetMenu implements JSONAction {
 			obj.put("icons/table_edit.png");
 			obj.put("alterTable(menuTreeC.nodeid);");
 			arr.put(obj);
+
+                        obj=new JSONArray();
+                        obj.put("-");
+                        obj.put("");
+                        obj.put("");
+                        arr.put(obj);
+
+                        obj=new JSONArray();
+			obj.put("Create Index...");
+			obj.put("icons/table_edit.png");
+			obj.put("alterTable(menuTreeC.nodeid);");
+			arr.put(obj);
+
+                        obj=new JSONArray();
+			obj.put("Alter Index...");
+			obj.put("icons/table_edit.png");
+			obj.put("alterTable(menuTreeC.nodeid);");
+			arr.put(obj);
+
+                        obj=new JSONArray();
+			obj.put("Remove Index...");
+			obj.put("icons/table_edit.png");
+			obj.put("alterTable(menuTreeC.nodeid);");
+			arr.put(obj);
+
+                        obj=new JSONArray();
+			obj.put("Alter PK...");
+			obj.put("icons/table_edit.png");
+			obj.put("alterTable(menuTreeC.nodeid);");
+			arr.put(obj);
 			
 		}else if("view".equals(nodeType)) {
 			JSONArray obj=new JSONArray();
 			obj.put("Select All");
 			obj.put("icons/page_edit.png");
 			obj.put("newEditor('select * from '+menuTreeC.nodeid.attributes.qname);");
+			arr.put(obj);
+		}
+                else if("views".equals(nodeType)) {
+			JSONArray obj=new JSONArray();
+			obj.put("Create View");
+			obj.put("icons/page_edit.png");
+                        obj.put("newEditor('CREATE VIEW view_name AS \\n ');");
 			arr.put(obj);
 		}
 		com.riversql.plugin.PluginManager.getInstance().loadAddedMenu(arr,sessionid,nodeType);

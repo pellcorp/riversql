@@ -135,17 +135,74 @@ public class MySQLPlugin implements Plugin {
 				ls.add(obj);
 			}
                         else if("view".equals(nodeType)){
-				JSONArray obj=new JSONArray();
-				obj.put("View...");
-				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
-				ls.add(obj);
+
 			}
                         else if("ct".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Catalog...");
 				obj.put("icons/chart_pie.png");
 				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_functs".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Create Function...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('CREATE FUNCTION name (param_name param_type) RETURNS return_type \\nBEGIN\\n	RETURN return_value; \\nEND ').execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_users".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Create User...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_user".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Create Like...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Alter User...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Drop User...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_procs".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Create Store Procedure...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  END; ').execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_proc".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Call Procedure...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname).execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_triggers".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Create Trigger...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  END; ').execute()");
+				ls.add(obj);
+			}
+                        else if("mysql_trigger".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Drop Trigger...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname).execute()");
 				ls.add(obj);
 			}
 			return ls.toArray(new JSONArray[0]);
@@ -220,10 +277,10 @@ public class MySQLPlugin implements Plugin {
 			SQLConnection conn) {
 		List<IStructureNode> added=new ArrayList<IStructureNode>();
 		if(isMysql(conn)){
-			
 			added.add(new FunctionTypeNode(catalogNode,conn));
 			added.add(new ProcedureTypeNode(catalogNode,conn));
-                        added.add(new UsersNode(catalogNode,conn));
+                        added.add(new TriggersNode(catalogNode,conn));
+			added.add(new UsersNode(catalogNode,conn));
 		}
 		return added;
 	}
