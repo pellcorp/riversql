@@ -77,7 +77,7 @@ function mysql_createDatabase(id){
 	        mode: 'local',
 	        triggerAction: 'all',
 	        selectOnFocus:true,
-	        width:250,
+	        width:200,
 	        forceSelection:true,
 	        fieldLabel:'collation',
 	        itemSelector: 'div.search-item',
@@ -88,21 +88,16 @@ function mysql_createDatabase(id){
 
 	});
 	
-	
-	
-	
-	
 	var config = {
-			
-			width:600,
-			height:300,
+			width:400,
+			height:200,
 			shadow:true,
 			minWidth:300,
-			minHeight:250,
+			minHeight:100,
 			modal: true,
 			collapsible: false,
 			closable: true,
-			title:'MySQL - New Database...' 
+			title:'New Database...' 
 		};
 		
 		var dialog = new Ext.Window(config);
@@ -116,7 +111,7 @@ function mysql_createDatabase(id){
 		dbname=new Ext.form.TextField({
 	        fieldLabel: 'Database Name',
 	        name: 'name',
-	        width:400,
+	        width:200,
 	        readOnly:false,
 	        allowBlank:false
 	    });
