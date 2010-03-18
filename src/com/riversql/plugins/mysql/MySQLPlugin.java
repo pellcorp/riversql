@@ -155,8 +155,9 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Create User...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("mysql_createNewUser(menuTreeC.nodeid.id,menuTreeC.nodeid.attributes.qname,menuTreeC.nodeid)");
 				ls.add(obj);
+
 			}
                         else if("mysql_user".equals(nodeType)){
 				JSONArray obj=new JSONArray();

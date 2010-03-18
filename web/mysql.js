@@ -1,4 +1,128 @@
 
+function mysql_createNewUser(id,tableName,node)
+{
+    var dialogTabPanel = new Ext.TabPanel( {
+            autoTabs :true,
+            activeTab :0,
+            deferredRender :false,
+            border :false
+    });
+
+    var userInfo = new Ext.form.FormPanel( {
+            title: 'User Information',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain',
+
+            items: [{
+                xtype:'fieldset',
+                title: 'Login Information',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'User Name',
+                        name: 'username',
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Password',
+                        name: 'pass',
+                        id: 'pass'
+                    },{
+                        fieldLabel: 'Confirm Password',
+                        name: 'pass-cfrm',
+                        vtype: 'password',
+                        initialPassField: 'pass'
+                    }, {
+                        fieldLabel: 'Host',
+                        name: 'host'
+                    }
+                ]
+            },{
+                xtype:'fieldset',
+                title: 'Additional Information',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'Full Name',
+                        name: 'fullName'
+                    },{
+                        fieldLabel: 'Description',
+                        name: 'description'
+                    },{
+                        fieldLabel: 'Email',
+                        name: 'email',
+                        vtype:'email'
+                    }
+                ]
+            }]
+    });
+
+    var privilegeInfo = new Ext.form.FormPanel( {
+            title: 'User Privilege',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain'
+    });
+
+    var resourceInfo = new Ext.form.FormPanel( {
+            title: 'Resource',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain',
+
+            items: [{
+                xtype:'fieldset',
+                title: 'Limiting User Resources',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'Max Questions',
+                        name: 'max_questions'
+                    },{
+                        fieldLabel: 'Max Updates',
+                        name: 'max_updates'
+                    },{
+                        fieldLabel: 'Max Connections',
+                        name: 'max_connections'
+                    }, {
+                        fieldLabel: 'Max User Connections',
+                        name: 'max_user_connections'
+                    }
+                ]
+            }]
+    });
+
+    dialogTabPanel.add(userInfo);
+    dialogTabPanel.add(privilegeInfo);
+    dialogTabPanel.add(resourceInfo);
+
+    var dialog = new Ext.Window( {
+            layout :'fit',
+            width :650,
+            height :500,
+            modal :true,
+            items :dialogTabPanel,
+            title :'Create User ' + node.text
+    });
+    function onClose() {
+            dialog.close();
+    }
+    function onCreateUserSubmit()
+    {
+        dialog.close();
+    }
+    
+    dialog.addButton('Close', onClose, dialog);
+    dialog.addButton('Done', onCreateUserSubmit, dialog);
+
+    dialog.show();
+}
 
 function mysql_emptyTable(id,tableName,node){
 	Ext.Msg.confirm('Empty Table '+tableName,'Do you really want to TRUNCATE TABLE '+tableName+'?',function(btn){
