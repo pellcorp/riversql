@@ -1,0 +1,125 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>MultiSelect &amp; ItemSelector</title>
+    <link rel="stylesheet" type="text/css" href="ext3.1.0/resources/css/riversql-min.css"/>
+    
+<script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Core API...';</script>
+<script type="text/javascript" src="build/ext_all-min.js"></script>
+
+<!--   <script type="text/javascript" src="grid_to_excel.js"></script> -->
+<script type="text/javascript" src="build/draw_all.js"></script> 
+ <script type="text/javascript" src="edit_area/edit_area_loader.js"></script> 
+<script type="text/javascript">var sqlResultPluginFactories=[];</script>
+<script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Building UI...';</script>
+<script type="text/javascript" src="XMLSerializer.js"></script>
+<script type="text/javascript" src="riversql.js"></script>
+<script type="text/javascript" src="grid_to_excel.js"></script>
+<script type="text/javascript" src="dbgraphics.js"></script>
+<script type="text/javascript" src="gridFactories.js"></script>
+<script type="text/javascript" src="mysql.js"></script>
+<script>
+	
+Ext.onReady(function(){
+
+    Ext.QuickTips.init();
+    Ext.form.Field.prototype.msgTarget = 'side';
+
+/*
+    var ds = new Ext.data.ArrayStore({
+        data: [[123,'One Hundred Twenty Three'],
+            ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
+            ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+        fields: ['value','text'],
+        sortInfo: {
+            field: 'value',
+            direction: 'ASC'
+        }
+    });
+
+
+
+    var isForm2 = new Ext.form.FormPanel({
+        title: 'ItemSelector Test',
+        width:700,
+        bodyStyle: 'padding:10px;'
+        
+    });
+
+    var itemSelector = new Ext.ux.ItemSelector({
+                name: 'itemselector',
+            fieldLabel: 'itemselector',
+            multiselects: [{
+                width: 250,
+                height: 200,
+                store: ds,
+                displayField: 'text',
+                valueField: 'value'
+            },{
+                width: 250,
+                height: 200,
+                store: [['10','Ten']],
+                tbar:[{
+                    text: 'clear',
+                    handler:function(){
+	                    isForm.getForm().findField('itemselector').reset();
+	                }
+                }]
+            }]
+    });
+*/
+
+var ds = new Ext.data.ArrayStore({
+        data: [['123','One Hundred Twenty Three'],
+            ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
+            ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+        fields: ['code','name'],
+        sortInfo: {
+            field: 'name',
+            direction: 'ASC'
+        }
+    });
+
+    var columnSelector = new Ext.ux.ItemSelector( {
+            name :"itemselector",
+            fieldLabel :"Privilege",
+            dataFields : ['code','name'],
+            toData : [['10','Ten']],
+            msWidth :150,
+            msHeight :200,
+            valueField :"code",
+            displayField :"name",
+            imagePath: 'icons/images/',
+            toLegend :"Selected",
+            fromLegend :"Available",
+            fromStore : ds
+    });
+
+    var privilegeInfo = new Ext.form.FormPanel({
+        title: 'User Privilege',
+        bodyStyle: 'padding:10px;'
+    });
+
+    privilegeInfo.add(columnSelector);
+    privilegeInfo.render('multiselect');
+
+
+
+
+});
+
+</script>
+</head>
+<body>
+    <h1>MultiSelect &amp; ItemSelector</h1>
+    <p>The js is not minified so it is readable. See <a href="multiselect-demo.js">multiselect-demo.js</a>.</p>
+    
+    <b>MultiSelect</b><br />
+
+    <p>Press Save with no items selected to see an example of validation applied.</p>
+    <div id="multiselect" class="demo-ct" style="margin-bottom:15px;"></div>
+    
+    <b>ItemSelector</b><br />
+    <p>Supports drag and drop, double-click, button move/reorder, etc. 
+</body>
+</html>
