@@ -1,4 +1,207 @@
 
+function mysql_editUser(id,tableName,node)
+{
+    var dialogTabPanel = new Ext.TabPanel( {
+            autoTabs :true,
+            activeTab :0,
+            deferredRender :false,
+            border :false
+    });
+
+    var userInfo = new Ext.form.FormPanel( {
+            title: 'User Information',
+            bodyStyle: 'padding:10px;',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain',
+
+            items: [{
+                xtype:'fieldset',
+                title: 'Login Information',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'User Name',
+                        name: 'username',
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Password',
+                        name: 'pass',
+                        id: 'pass'
+                    },{
+                        fieldLabel: 'Confirm Password',
+                        name: 'pass-cfrm',
+                        vtype: 'password',
+                        initialPassField: 'pass'
+                    }, {
+                        fieldLabel: 'Host',
+                        name: 'host'
+                    }
+                ]
+            },{
+                xtype:'fieldset',
+                title: 'Additional Information',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'Full Name',
+                        name: 'fullName'
+                    },{
+                        fieldLabel: 'Description',
+                        name: 'description'
+                    },{
+                        fieldLabel: 'Email',
+                        name: 'email',
+                        vtype:'email'
+                    }
+                ]
+            }]
+    });
+
+    var ds = new Ext.data.ArrayStore({
+        data: [['123','One Hundred Twenty Three'],
+            ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
+            ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+        fields: ['code','name'],
+        sortInfo: {
+            field: 'name',
+            direction: 'ASC'
+        }
+    });
+
+
+
+    var columnSelector = new Ext.ux.ItemSelector( {
+            name :"itemselector",
+            fieldLabel :"Privilege",
+            dataFields : ['code','name'],
+            toData : [['10','Ten']],
+            msWidth :150,
+            msHeight :200,
+            valueField :"code",
+            displayField :"name",
+            imagePath: 'icons/images/',
+            toLegend :"Selected",
+            fromLegend :"Available",
+            fromStore :ds
+    });
+
+    var privilegeInfo = new Ext.form.FormPanel({
+        title: 'User Privilege',
+        bodyStyle: 'padding:10px;',
+        items:columnSelector
+    });
+
+
+    var isForm = new Ext.form.FormPanel({
+        title: 'ItemSelector Test',
+        width:700,
+        bodyStyle: 'padding:10px;',
+        items:[{
+            xtype: 'itemselector',
+            name: 'itemselector',
+            renderTo: isForm,
+            fieldLabel: 'ItemSelector',
+	    imagePath: '../ux/images/',
+            multiselects: [{
+                width: 150,
+                height: 200,
+                store: ds,
+                displayField: 'text',
+                valueField: 'value'
+            },{
+                width: 150,
+                height: 200,
+                store: [['10','Ten']],
+                tbar:[{
+                    text: 'clear',
+                    handler:function(){
+	                    isForm.getForm().findField('itemselector').reset();
+	                }
+                }]
+            }]
+        }],
+
+        buttons: [{
+            text: 'Save',
+            handler: function(){
+                if(isForm.getForm().isValid()){
+                    Ext.Msg.alert('Submitted Values', 'The following will be sent to the server: <br />'+
+                        isForm.getForm().getValues(true));
+                }
+            }
+        }]
+    });
+
+/*
+    var privilegeInfo = new Ext.form.FormPanel( {
+            title: 'User Privilege',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain'
+    });
+*/
+    var resourceInfo = new Ext.form.FormPanel( {
+            title: 'Resource',
+            bodyStyle: 'padding:10px;',
+            labelWidth :95,
+            onSubmit :Ext.emptyFn,
+            baseCls :'x-plain',
+
+            items: [{
+                xtype:'fieldset',
+                title: 'Limiting User Resources',
+                autoHeight:true,
+                defaults: {width: 210},
+                defaultType: 'textfield',
+                collapsible: true,
+                items :[{
+                        fieldLabel: 'Max Questions',
+                        name: 'max_questions'
+                    },{
+                        fieldLabel: 'Max Updates',
+                        name: 'max_updates'
+                    },{
+                        fieldLabel: 'Max Connections',
+                        name: 'max_connections'
+                    }, {
+                        fieldLabel: 'Max User Connections',
+                        name: 'max_user_connections'
+                    }
+                ]
+            }]
+    });
+
+    dialogTabPanel.add(userInfo);
+    dialogTabPanel.add(privilegeInfo);
+    dialogTabPanel.add(resourceInfo);
+
+    var dialog = new Ext.Window( {
+            layout :'fit',
+            width :650,
+            height :500,
+            modal :true,
+            items :dialogTabPanel,
+            title :'Create User ' + node.text
+    });
+    function onClose() {
+            dialog.close();
+    }
+    function onCreateUserSubmit()
+    {
+        dialog.close();
+    }
+    
+    dialog.addButton('Close', onClose, dialog);
+    dialog.addButton('Done', onCreateUserSubmit, dialog);
+
+    dialog.show();
+}
+
 function mysql_createNewUser(id,tableName,node)
 {
     var dialogTabPanel = new Ext.TabPanel( {
@@ -117,7 +320,7 @@ function mysql_createNewUser(id,tableName,node)
     {
         dialog.close();
     }
-    
+
     dialog.addButton('Close', onClose, dialog);
     dialog.addButton('Done', onCreateUserSubmit, dialog);
 

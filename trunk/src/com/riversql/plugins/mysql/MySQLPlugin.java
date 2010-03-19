@@ -169,7 +169,7 @@ public class MySQLPlugin implements Plugin {
                                 obj=new JSONArray();
 				obj.put("Alter User...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+                                obj.put("mysql_editUser(menuTreeC.nodeid.id,menuTreeC.nodeid.attributes.qname,menuTreeC.nodeid)");
 				ls.add(obj);
 
                                 obj=new JSONArray();

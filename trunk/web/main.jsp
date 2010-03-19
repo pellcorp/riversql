@@ -8,7 +8,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
-	<link rel="stylesheet" type="text/css" href="ext3.1.0/resources/css/riversql-min.css"/> 
+	<link rel="stylesheet" type="text/css" href="ext3.1.0/resources/css/riversql-min.css"/>
+        <link rel="stylesheet" type="text/css" href="MultiSelect.css"/>
 	<link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
 
     <title>RiverSQL</title>
@@ -156,6 +157,7 @@
 
 <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Core API...';</script>
 <script type="text/javascript" src="build/ext_all-min.js"></script>
+
 <!--   <script type="text/javascript" src="grid_to_excel.js"></script> -->
 <script type="text/javascript" src="build/draw_all.js"></script> 
  <script type="text/javascript" src="edit_area/edit_area_loader.js"></script> 

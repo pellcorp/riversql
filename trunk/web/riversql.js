@@ -4046,7 +4046,7 @@ function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 		msHeight :200,
 		valueField :"cname",
 		displayField :"cname",
-		imagePath :"ext/images/",
+		imagePath :"icons/images/",
 		toLegend :"Selected",
 		fromLegend :"Available",
 		fromStore :store_table_columns
@@ -4133,7 +4133,7 @@ function newPKForAlterTable(node, PKDef, dsPK) {
 		msHeight :200,
 		valueField :"cname",
 		displayField :"cname",
-		imagePath :"ext/images/",
+		imagePath :"icons/images/",
 		toLegend :"Selected",
 		fromLegend :"Available",
 		fromStore :store_table_columns
