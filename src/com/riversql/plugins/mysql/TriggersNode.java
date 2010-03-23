@@ -25,8 +25,8 @@ public class TriggersNode extends BasePluginType implements IStructureNode{
 			rs=ps.executeQuery();
 			while(rs.next()){
 				String oname=rs.getString(1);
-				TriggerNode functNode=new TriggerNode(this,oname,conn);
-				list.add(functNode);
+				TriggerNode triggerNode=new TriggerNode(this,oname,conn);
+				list.add(triggerNode);
 			}
 
 		}catch(Exception e){
