@@ -25,8 +25,8 @@ public class ProcedureTypeNode extends BasePluginType implements IStructureNode{
 			rs=ps.executeQuery();
 			while(rs.next()){
 				String oname=rs.getString(1);
-				ProcedureNode functNode=new ProcedureNode(this,oname,conn);
-				list.add(functNode);
+				ProcedureNode procedureNode=new ProcedureNode(this,oname,conn);
+				list.add(procedureNode);
 			}
 	
 		}catch(Exception e){
