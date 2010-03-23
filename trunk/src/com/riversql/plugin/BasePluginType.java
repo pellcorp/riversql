@@ -52,6 +52,7 @@ public abstract class BasePluginType implements IStructureNode {
 				obj.put("leaf",is.isLeaf());
 				obj.put("type",is.getType());
 				obj.put("cls",is.getCls());
+                                obj.put("qname",is.getQualifiedName());
 				arr.put(obj);
 			}
 			js.put("nodes", arr);
@@ -86,7 +87,7 @@ public abstract class BasePluginType implements IStructureNode {
         public String getQualifiedName() {
             if(isLeaf())
             {
-		return parentNode.getName() + name;
+		return "'"+((BasePluginType)parentNode).getParent().getName() + "'.'" + name + "'";
             }
             else
             {
