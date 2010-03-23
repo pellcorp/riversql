@@ -15,4 +15,5 @@ public interface IStructureNode {
 
 	void refresh();
 	public String getQualifiedName();
+
 }
