@@ -75,33 +75,33 @@ public class MySQLPlugin implements Plugin {
 				obj=new JSONArray();
 				obj.put("Analyze Table");
 				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				obj=new JSONArray();
 				obj.put("Check Table");
 				obj.put("icons/chart_bar.png");
-				obj.put("newEditor('check table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('check table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				obj=new JSONArray();
 				obj.put("Explain Table");
 				obj.put("icons/chart_line.png");
-				obj.put("newEditor('explain '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('explain '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				obj=new JSONArray();
 				obj.put("Show Create Table");
 				obj.put("icons/database_edit.png");
-				obj.put("newEditor('show create table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('show create table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				
 				obj=new JSONArray();
 				obj.put("Optimize Table");
 				obj.put("icons/wrench.png");
-				obj.put("newEditor('optimize table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('optimize table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				obj=new JSONArray();
 				obj.put("Repair Table");
 				obj.put("icons/wrench_orange.png");
-				obj.put("newEditor('repair table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('repair table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 				
 				
@@ -118,7 +118,7 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Tables...");
 				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 
                                 obj=new JSONArray();
@@ -131,7 +131,7 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Table...");
 				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 			}
                         else if("view".equals(nodeType)){
@@ -141,21 +141,21 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Catalog...");
 				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 			}
                         else if("mysql_functs".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Create Function...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CREATE FUNCTION name (param_name param_type) RETURNS return_type \\nBEGIN\\n	RETURN return_value; \\nEND ').execute()");
+				obj.put("newEditor('CREATE FUNCTION name (param_name param_type) RETURNS return_type \\nBEGIN\\n	RETURN return_value; \\nEND ');");
 				ls.add(obj);
 			}
                         else if("mysql_funct".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Drop Function...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('DROP FUNCTION '+menuTreeC.nodeid.attributes.qname+'()').execute()");
+				obj.put("newEditor('DROP FUNCTION '+menuTreeC.nodeid.attributes.qname+'()');");
 				ls.add(obj);
 			}
                         else if("mysql_users".equals(nodeType)){
@@ -170,7 +170,7 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Create Like...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 
                                 obj=new JSONArray();
@@ -182,41 +182,41 @@ public class MySQLPlugin implements Plugin {
                                 obj=new JSONArray();
 				obj.put("Drop User...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 			}
                         else if("mysql_procs".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Create Store Procedure...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  END; ').execute()");
+				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  END; ');");
 				ls.add(obj);
 			}
                         else if("mysql_proc".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Call Procedure...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()').execute()");
+				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()');");
 				ls.add(obj);
 
                                 obj=new JSONArray();
 				obj.put("Drop Procedure...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('DROP PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()').execute()");
+				obj.put("newEditor('DROP PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()');");
 				ls.add(obj);
 			}
                         else if("mysql_triggers".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Create Trigger...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  \\n  END; ').execute()");
+				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  \\n  END; ');");
 				ls.add(obj);
 			}
                         else if("mysql_trigger".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Drop Trigger...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname);");
 				ls.add(obj);
 			}
 			return ls.toArray(new JSONArray[0]);
