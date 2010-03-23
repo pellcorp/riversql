@@ -17,7 +17,6 @@ import com.riversql.dbtree.IStructureNode;
 
 
 public abstract class BasePluginType implements IStructureNode {
-	public String getQualifiedName() {return null;}
 	protected final String id;
 	protected final SQLConnection conn;
 	protected final List<IStructureNode>list=new ArrayList<IStructureNode>();
@@ -82,5 +81,16 @@ public abstract class BasePluginType implements IStructureNode {
 	}
 	public SQLConnection getConn() {
 		return conn;
+	}
+
+        public String getQualifiedName() {
+            if(isLeaf())
+            {
+		return parentNode.getName() + name;
+            }
+            else
+            {
+                return null;
+            }
 	}
 }

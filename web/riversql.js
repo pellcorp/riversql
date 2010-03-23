@@ -3988,7 +3988,8 @@ function createTable(node) {
 		dsPKChanged();
 	});
 
-}// end createTable
+}
+// end createTable
 
 function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 
