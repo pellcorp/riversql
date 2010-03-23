@@ -151,6 +151,13 @@ public class MySQLPlugin implements Plugin {
 				obj.put("newEditor('CREATE FUNCTION name (param_name param_type) RETURNS return_type \\nBEGIN\\n	RETURN return_value; \\nEND ').execute()");
 				ls.add(obj);
 			}
+                        else if("mysql_funct".equals(nodeType)){
+				JSONArray obj=new JSONArray();
+				obj.put("Drop Function...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('DROP FUNCTION '+menuTreeC.nodeid.attributes.qname+'()').execute()");
+				ls.add(obj);
+			}
                         else if("mysql_users".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Create User...");
@@ -189,14 +196,20 @@ public class MySQLPlugin implements Plugin {
 				JSONArray obj=new JSONArray();
 				obj.put("Call Procedure...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname).execute()");
+				obj.put("newEditor('CALL PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()').execute()");
+				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Drop Procedure...");
+				obj.put("icons/page_edit.png");
+				obj.put("newEditor('DROP PROCEDURE '+menuTreeC.nodeid.attributes.qname+'()').execute()");
 				ls.add(obj);
 			}
                         else if("mysql_triggers".equals(nodeType)){
 				JSONArray obj=new JSONArray();
 				obj.put("Create Trigger...");
 				obj.put("icons/page_edit.png");
-				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  END; ').execute()");
+				obj.put("newEditor('CREATE PROCEDURE name (param_name param_type)\\n  BEGIN\\n  \\n  END; ').execute()");
 				ls.add(obj);
 			}
                         else if("mysql_trigger".equals(nodeType)){
@@ -280,7 +293,7 @@ public class MySQLPlugin implements Plugin {
 		if(isMysql(conn)){
 			added.add(new FunctionTypeNode(catalogNode,conn));
 			added.add(new ProcedureTypeNode(catalogNode,conn));
-                        added.add(new TriggersNode(catalogNode,conn));
+			added.add(new TriggersNode(catalogNode,conn));
 			added.add(new UsersNode(catalogNode,conn));
 		}
 		return added;

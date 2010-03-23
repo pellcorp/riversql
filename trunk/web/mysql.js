@@ -73,15 +73,13 @@ function mysql_editUser(id,tableName,node)
         }
     });
 
-
-
     var columnSelector = new Ext.ux.ItemSelector( {
             name :"itemselector",
-            fieldLabel :"Privilege",
             dataFields : ['code','name'],
             toData : [['10','Ten']],
             msWidth :150,
-            msHeight :200,
+            msHeight :350,
+            columnWidth: .66,
             valueField :"code",
             displayField :"name",
             imagePath: 'icons/images/',
@@ -90,52 +88,43 @@ function mysql_editUser(id,tableName,node)
             fromStore :ds
     });
 
+    var myData = [
+        ['MySql'],['MyDB'],['Test'],['Info']
+        ]
+    var databaseList = new Ext.data.ArrayStore({
+        fields: [
+           {name: 'database'}
+        ]
+    });
+    databaseList.loadData(myData);
+
+    var grid = new Ext.grid.GridPanel({
+        store: databaseList,
+        columns: [
+            {id:'database',header: 'Database', width: 120, sortable: true, dataIndex: 'database'}
+        ],
+        stripeRows: true,
+        autoExpandColumn: 'database',
+        columnWidth: .33,
+        height: 350,
+        width: 150,
+        // config options for stateful behavior
+        stateful: true,
+        stateId: 'grid'
+    });
+
     var privilegeInfo = new Ext.form.FormPanel({
         title: 'User Privilege',
         bodyStyle: 'padding:10px;',
-        items:columnSelector
+        hideLabels: true,
+        layout:'column',
+        items:[
+            grid
+            ,
+            columnSelector
+            ]
     });
 
-
-    var isForm = new Ext.form.FormPanel({
-        title: 'ItemSelector Test',
-        width:700,
-        bodyStyle: 'padding:10px;',
-        items:[{
-            xtype: 'itemselector',
-            name: 'itemselector',
-            renderTo: isForm,
-            fieldLabel: 'ItemSelector',
-	    imagePath: '../ux/images/',
-            multiselects: [{
-                width: 150,
-                height: 200,
-                store: ds,
-                displayField: 'text',
-                valueField: 'value'
-            },{
-                width: 150,
-                height: 200,
-                store: [['10','Ten']],
-                tbar:[{
-                    text: 'clear',
-                    handler:function(){
-	                    isForm.getForm().findField('itemselector').reset();
-	                }
-                }]
-            }]
-        }],
-
-        buttons: [{
-            text: 'Save',
-            handler: function(){
-                if(isForm.getForm().isValid()){
-                    Ext.Msg.alert('Submitted Values', 'The following will be sent to the server: <br />'+
-                        isForm.getForm().getValues(true));
-                }
-            }
-        }]
-    });
 
 /*
     var privilegeInfo = new Ext.form.FormPanel( {

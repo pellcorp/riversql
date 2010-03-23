@@ -97,6 +97,12 @@ public class GetMenu implements JSONAction {
 			obj.put("icons/page_edit.png");
 			obj.put("newEditor('select * from '+menuTreeC.nodeid.attributes.qname);");
 			arr.put(obj);
+
+                        obj=new JSONArray();
+			obj.put("Drop View");
+			obj.put("icons/page_edit.png");
+			obj.put("newEditor('Drop View '+menuTreeC.nodeid.attributes.qname);");
+			arr.put(obj);
 		}
                 else if("views".equals(nodeType)) {
 			JSONArray obj=new JSONArray();
