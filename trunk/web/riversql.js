@@ -610,16 +610,15 @@ function createViewport() {
 		}, {
 			region :"south",
 			title :"<img src='icons/application_view_detail.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Details",
-			height :70,
+			height :150,
 			split :true,
 			collapsible :true,
 			titleCollapse :true,
 			items :southPanel,
 			border :false,
-			layout :'fit',
-				tbar : [report ]	
-				
-				
+			layout :'fit'
+                        //,
+			//tbar : [report ]
 				
 		}, {
 			region :"east",

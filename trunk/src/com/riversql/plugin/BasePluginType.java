@@ -63,6 +63,13 @@ public abstract class BasePluginType implements IStructureNode {
 		return js;
 	}
 
+        public List<IStructureNode> getChildren()
+        {
+            load();
+            
+            return list;
+        }
+
 	public abstract void load();
 	
 	public  String getName(){return name;}

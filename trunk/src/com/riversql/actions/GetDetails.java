@@ -69,8 +69,12 @@ public class GetDetails  implements JSONAction {
 			record.put("Preview");
 			record.put("do?action=preview");
 			array.put(record);
-		}
-		else if("tbs".equals(nodeType)||"views".equals(nodeType)){
+		}else if("tbs".equals(nodeType)||"views".equals(nodeType)||"mysql_functs".equals(nodeType)||"mysql_users".equals(nodeType)||"mysql_procs".equals(nodeType)){
+			JSONArray record=new JSONArray();
+			record.put("Objects");
+			record.put("do?action=getMeta");
+			array.put(record);
+		}else if("mysql_funct".equals(nodeType)||"mysql_user".equals(nodeType)||"mysql_proc".equals(nodeType)){
 			JSONArray record=new JSONArray();
 			record.put("Objects");
 			record.put("do?action=getMeta");

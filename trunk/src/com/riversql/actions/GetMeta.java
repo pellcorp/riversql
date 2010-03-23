@@ -17,6 +17,7 @@ import com.riversql.dbtree.ColumnModel;
 import com.riversql.dbtree.IStructureNode;
 import com.riversql.dbtree.TableNode;
 import com.riversql.dbtree.TablesNode;
+import com.riversql.plugin.BasePluginType;
 
 
 
@@ -69,6 +70,18 @@ public class GetMeta implements JSONAction {
 				String remarks = ((TableNode)tableNode).getRemarks();
 				if(remarks==null)
 					remarks="";
+				record.put(remarks);
+				data.put(record);
+			}
+		}else if(obj!=null && (obj instanceof com.riversql.plugins.mysql.UsersNode || obj instanceof com.riversql.plugins.mysql.FunctionTypeNode || obj instanceof com.riversql.plugins.mysql.ProcedureTypeNode || obj instanceof com.riversql.plugins.mysql.TriggersNode)){
+			meta.put("Name");
+			meta.put("Remarks");
+			BasePluginType baseType=((BasePluginType)obj);
+			List<IStructureNode> ls=baseType.getChildren();
+			for (IStructureNode baseChildType : ls) {
+				JSONArray record=new JSONArray();
+				record.put(baseChildType.getName());
+				String remarks = "";
 				record.put(remarks);
 				data.put(record);
 			}
