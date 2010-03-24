@@ -610,7 +610,7 @@ function createViewport() {
 		}, {
 			region :"south",
 			title :"<img src='icons/application_view_detail.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Details",
-			height :150,
+			height :200,
 			split :true,
 			collapsible :true,
 			titleCollapse :true,
@@ -846,8 +846,8 @@ function newsourcesPanel() {
 	// e.stopEvent();
 	var config = {
 
-		width :600,
-		height :300,
+		width :500,
+		height :250,
 		shadow :true,
 		minWidth :300,
 		minHeight :250,
@@ -878,7 +878,7 @@ function newsourcesPanel() {
 		editable :false,
 		triggerAction :'all',
 		selectOnFocus :true,
-		width :400,
+		width :300,
 		forceSelection :true,
 		tpl: srcDrvTpl
 	});
@@ -887,7 +887,7 @@ function newsourcesPanel() {
 	var jdbcurl = new Ext.form.TextField( {
 		fieldLabel :'JDBC URL',
 		name :'url',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :false
 	});
@@ -895,14 +895,14 @@ function newsourcesPanel() {
 	sourceForm.add(new Ext.form.TextField( {
 		fieldLabel :'Source Name',
 		name :'sourceName',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :false
 	}),  jdbcurl, newSourceDriverCombo, 
 	new Ext.form.TextField( {
 		fieldLabel :'User Name',
 		name :'user',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :true
 	})
@@ -945,11 +945,11 @@ function newdriversPanel() {
 	// e.stopEvent();
 	var config = {
 
-		width :600,
-		height :300,
+		width :500,
+		height :200,
 		shadow :true,
 		minWidth :300,
-		minHeight :250,
+		minHeight :150,
 		modal :true,
 		collapsible :false,
 		closable :true,
@@ -970,7 +970,7 @@ function newdriversPanel() {
 	driverForm.add(new Ext.form.TextField( {
 		fieldLabel :'Driver Name',
 		name :'drivername',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :false,
 		value :''
@@ -979,14 +979,14 @@ function newdriversPanel() {
 	new Ext.form.TextField( {
 		fieldLabel :'Driver Class',
 		name :'driverclass',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :false,
 		value :''
 	}), new Ext.form.TextField( {
 		fieldLabel :'Example URL',
 		name :'exampleurl',
-		width :400,
+		width :300,
 		readOnly :false,
 		allowBlank :true,
 		value :''
@@ -2725,10 +2725,10 @@ function openConnectionDialog(alias) {
 
 	var config = {
 		width :500,
-		height :300,
+		height :200,
 		shadow :true,
 		minWidth :300,
-		minHeight :250,
+		minHeight :150,
 		modal :true,
 		collapsible :false,
 		closable :true,
@@ -3274,7 +3274,7 @@ function alterTable(node) {
 		icon :'icons/key_add.png',
 		text :'Add Index',
 		handler : function() {
-			newIndexForAlterTable(node, IndexDef, dsIndexes);
+			newIndexForAlterTable(node, IndexDef, dsIndexes, dsColumns);
 		}
 	});
 
@@ -3318,7 +3318,7 @@ function alterTable(node) {
 		icon :'icons/table_key.png',
 		text :'Add PK',
 		handler : function() {
-			newPKForAlterTable(node, PKDef, dsPK);
+			newPKForAlterTable(node, PKDef, dsPK, dsColumns);
 		}
 	});
 

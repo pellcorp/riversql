@@ -18,7 +18,7 @@ public class UsersNode extends BasePluginType implements IStructureNode{
 		ResultSet rs=null;
 		PreparedStatement ps=null;
 		try{
-			final String sql="select concat(user,'@',host) from mysql.user";
+			final String sql="select concat('\'',user,'\'','@','\'',host,'\'') from mysql.user";
 			ps=conn.prepareStatement(sql);
 			rs=ps.executeQuery();
 			while(rs.next()){

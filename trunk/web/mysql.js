@@ -76,7 +76,7 @@ function mysql_editUser(id,tableName,node)
     var columnSelector = new Ext.ux.ItemSelector( {
             name :"itemselector",
             dataFields : ['code','name'],
-            toData : [['10','Ten']],
+            toData : [['10','Ten'],['8', 'Eight']],
             msWidth :150,
             msHeight :350,
             columnWidth: .66,
@@ -87,7 +87,7 @@ function mysql_editUser(id,tableName,node)
             fromLegend :"Available",
             fromStore :ds
     });
-
+    
     var myData = [
         ['MySql'],['MyDB'],['Test'],['Info']
         ]
