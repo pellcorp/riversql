@@ -116,15 +116,9 @@ public class MySQLPlugin implements Plugin {
 			}
                         else if("tbs".equals(nodeType)){
 				JSONArray obj=new JSONArray();
-				obj.put("Tables...");
-				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
-				ls.add(obj);
-
-                                obj=new JSONArray();
                                 obj.put("Create Table...");
                                 obj.put("icons/table_edit.png");
-                                obj.put("createTable(menuTreeC.nodeid);");
+                                obj.put("createTable(menuTreeC.nodeid.parentNode);");
                                 ls.add(obj);
 			}
                         else if("table".equals(nodeType)){
@@ -139,9 +133,9 @@ public class MySQLPlugin implements Plugin {
 			}
                         else if("ct".equals(nodeType)){
 				JSONArray obj=new JSONArray();
-				obj.put("Catalog...");
-				obj.put("icons/chart_pie.png");
-				obj.put("newEditor('analyze table '+menuTreeC.nodeid.attributes.qname);");
+				obj.put("Create Database/Schema...");
+				obj.put("icons/database_add.png");
+				obj.put("mysql_createDatabase(menuTreeC.nodeid.id)");
 				ls.add(obj);
 			}
                         else if("mysql_functs".equals(nodeType)){
