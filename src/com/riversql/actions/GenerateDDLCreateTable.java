@@ -40,7 +40,7 @@ public class GenerateDDLCreateTable implements JSONAction {
 		String qualifiedName=tablename;
                 
                 StringBuilder strbuilder=new StringBuilder();
-                strbuilder.append("Create Table ").append(tablename);
+                strbuilder.append("Create Table ").append(schemaname).append(".").append(tablename);
                 if(syntaxGen!=null){
 
                         for(int i=0;i<arrNewCols.length();i++){
@@ -89,10 +89,15 @@ public class GenerateDDLCreateTable implements JSONAction {
 		return resultObj;
 	}
 	String tableid;
+        String schemaname;
         String tablename;
 
 	public void setTableid(String tableid) {
 		this.tableid = tableid;
+	}
+        
+        public void setSchemaName(String schemaname) {
+		this.schemaname = schemaname;
 	}
 
         public void setTablename(String tablename) {

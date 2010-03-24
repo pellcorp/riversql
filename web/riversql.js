@@ -3775,7 +3775,7 @@ function createTable(node) {
 		icon :'icons/key_add.png',
 		text :'Add Index',
 		handler : function() {
-			newIndexForAlterTable(node, IndexDef, dsIndexes);
+			newIndexForAlterTable(node, IndexDef, dsIndexes,dsColumns);
 		}
 	});
 
@@ -3817,7 +3817,7 @@ function createTable(node) {
 		icon :'icons/table_key.png',
 		text :'Add PK',
 		handler : function() {
-			newPKForAlterTable(node, PKDef, dsPK);
+			newPKForAlterTable(node, PKDef, dsPK, dsColumns);
 		}
 	});
 
@@ -3875,7 +3875,7 @@ function createTable(node) {
 		height :500,
 		modal :true,
 		items :[newDBForm],
-		title :'Create Table ' + node.text
+		title :'Create Table at Schema: ' + node.text
 
 	});
 	function onClose() {
@@ -3890,7 +3890,6 @@ function createTable(node) {
 		var newIndexes = [];
 		var newPK = [];
 		var countIdx = dsIndexes.getCount();
-                Ext.example.msg('Confirmation','You clicked the "{0}" button.', newDBName.getValue());
 
 		for ( var i = 0; i < countIdx; i++) {
 			var rcIdx = dsIndexes.getAt(i);
@@ -3909,7 +3908,7 @@ function createTable(node) {
 				var obj = new Object();
 				obj['pkname'] = rcPK.get('pkname');
 				obj['cols'] = rcPK.get('cols');
-				newPK[0] = obj;
+				newPK[newPK.length] = obj;
 			}
 		}
 		var count = dsColumns.getCount();
@@ -3945,6 +3944,7 @@ function createTable(node) {
 			method :'POST',
 			params : {
 				tableid :node.id,
+                                schemaname :node.text,
                                 tablename :newDBName.getValue(),
 				newCols :Ext.encode(newColums),
 				newIdxs :Ext.encode(newIndexes),
@@ -3962,10 +3962,10 @@ function createTable(node) {
 		columnsgrid.stopEditing();
 	});
 
-	dsColumns.load();
-	dsIndexes.load();
+	//dsColumns.load();
+	//dsIndexes.load();
 
-	dsPK.load();
+	//dsPK.load();
 
 	function dsPKChanged() {
 		if (dsPK.getCount() == 0) {
@@ -3990,11 +3990,11 @@ function createTable(node) {
 }
 // end createTable
 
-function newIndexForAlterTable(node, IndexDef, dsIndexes) {
+function newIndexForAlterTable(node, IndexDef, dsIndexes,dsColumns) {
 
 	var config = {
-		width :800,
-		height :450,
+		width :700,
+		height :350,
 		shadow :true,
 		minWidth :300,
 		minHeight :250,
@@ -4014,7 +4014,7 @@ function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 		name :'unique',
 		// width:'auto',
 		fieldLabel :'Unique',
-		labelAlign :'top',
+		labelAlign :'left',
 		value :'1'
 	});
 	var indexName = new Ext.form.TextField( {
@@ -4025,17 +4025,6 @@ function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 		allowBlank :false
 
 	});
-	var reader_table_column = new Ext.data.JsonReader( {
-		root :'result.columns'
-	}, [ 'cname' ]);
-	var store_table_columns = new Ext.data.Store( {
-		proxy :new Ext.data.HttpProxy( {
-			url :'do?action=getTableColumns&id=' + node.id,
-			method :'post'
-		}),
-		reader :reader_table_column
-	});
-	store_table_columns.load();
 
 	columnSelector = new Ext.ux.ItemSelector( {
 		name :"itemselector",
@@ -4049,11 +4038,11 @@ function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 		imagePath :"icons/images/",
 		toLegend :"Selected",
 		fromLegend :"Available",
-		fromStore :store_table_columns
+		fromStore :dsColumns
 	});
 
 	var newIndexForm = new Ext.form.FormPanel( {
-		labelAlign :'top',
+		labelAlign :'left',
 		frame :true,
 		url :'do?action=generateDDLCreateIndex',
 		bodyStyle :'padding:5px 5px 0',
@@ -4086,10 +4075,10 @@ function newIndexForAlterTable(node, IndexDef, dsIndexes) {
 	newIndexForm.render(dialog.body);
 } // end newIndexForAlterTable
 
-function newPKForAlterTable(node, PKDef, dsPK) {
+function newPKForAlterTable(node, PKDef, dsPK, dsColumns) {
 	var config = {
-		width :800,
-		height :450,
+		width :700,
+		height :350,
 		shadow :true,
 		minWidth :300,
 		minHeight :250,
@@ -4112,18 +4101,6 @@ function newPKForAlterTable(node, PKDef, dsPK) {
 
 	dialog.addButton('Close', dialog.close, dialog);
 
-	var reader_table_column = new Ext.data.JsonReader( {
-		root :'result.columns'
-	}, [ 'cname' ]);
-	var store_table_columns = new Ext.data.Store( {
-		proxy :new Ext.data.HttpProxy( {
-			url :'do?action=getTableColumns&id=' + node.id,
-			method :'post'
-		}),
-		reader :reader_table_column
-	});
-	store_table_columns.load();
-
 	columnSelector = new Ext.ux.ItemSelector( {
 		name :"itemselector",
 		fieldLabel :"Column",
@@ -4136,11 +4113,11 @@ function newPKForAlterTable(node, PKDef, dsPK) {
 		imagePath :"icons/images/",
 		toLegend :"Selected",
 		fromLegend :"Available",
-		fromStore :store_table_columns
+		fromStore :dsColumns
 	});
 
 	var newPKForm = new Ext.form.FormPanel( {
-		labelAlign :'top',
+		labelAlign :'left',
 		frame :true,
 		bodyStyle :'padding:5px 5px 0',
 		items : [ pkName, columnSelector ]
