@@ -27,6 +27,7 @@ import com.riversql.plugins.mysql.actions.CreateDBDDL;
 import com.riversql.plugins.mysql.actions.DropTable;
 import com.riversql.plugins.mysql.actions.EmptyTable;
 import com.riversql.plugins.mysql.actions.GetCollations;
+import com.riversql.plugins.mysql.actions.GetUserInfo;
 import com.riversql.plugins.mysql.actions.GetUserPrivileges;
 import com.riversql.plugins.mysql.actions.RenameTable;
 import com.riversql.plugins.mysql.actions.ShowCharacterSets;
@@ -364,6 +365,10 @@ public class MySQLPlugin implements Plugin {
 			TableNode tn=(TableNode)IDManager.get().get(id);
 			DropTable dt=new DropTable(tn.getConn(), tableName);
 			return dt.execute();
+		}
+                else if("getUserInfo".equals(method)){
+			BasePluginType node=(BasePluginType)IDManager.get().get(id);
+			return new GetUserInfo(node.getConn(),node).execute();
 		}
                 else if("getUserPrivileges".equals(method)){
 			BasePluginType node=(BasePluginType)IDManager.get().get(id);
