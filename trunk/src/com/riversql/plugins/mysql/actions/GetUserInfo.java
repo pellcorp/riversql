@@ -11,6 +11,7 @@ import com.riversql.plugin.BasePluginType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
@@ -57,7 +58,7 @@ public class GetUserInfo extends GetJSONObjectBase{
         public final void load() throws Exception{
             
             String userHost = node.getName();
-            HashMap<String, JSONArray> schema=new HashMap<String, JSONArray>();
+            HashMap<String, ArrayList<String>> schema=new HashMap<String, ArrayList<String>>();
 
             userinfos=new JSONArray();
             schemaprivileges=new JSONArray();
@@ -95,7 +96,17 @@ public class GetUserInfo extends GetJSONObjectBase{
                 ps=(PreparedStatement) conn.prepareStatement(sql);
                 rs=ps.executeQuery();
                 while(rs.next()){
-                        schema.put(rs.getString(1),new JSONArray());
+                        schema.put(rs.getString(1),new ArrayList());
+                }
+                rs.close();
+                ps.close();
+
+                ArrayList<String> privilegeList = new ArrayList<String>();
+                sql = "SHOW PRIVILEGES;";
+                ps=(PreparedStatement) conn.prepareStatement(sql);
+                rs=ps.executeQuery();
+                while(rs.next()){
+                    privilegeList.add(rs.getString(1).toUpperCase());
                 }
                 rs.close();
                 ps.close();
@@ -107,15 +118,34 @@ public class GetUserInfo extends GetJSONObjectBase{
                 rs=ps.executeQuery();
                 while(rs.next()){
                     String tableschema = rs.getString(1).replace('\\', ' ').replaceAll(" ", "");
-                    String privilegetype = rs.getString(2);
-                    JSONArray privilege = new JSONArray();
-                    schema.get(tableschema).put(privilege.put(privilegetype));
+                    String privilegetype = rs.getString(2).toUpperCase();
+                    schema.get(tableschema).add(privilegetype);
+                    //JSONArray privilege = new JSONArray();
+                    //schema.get(tableschema).put(privilege.put(privilegetype));
                 }
-                for(Map.Entry <String, JSONArray> entry: schema.entrySet()){
+                for(Map.Entry <String, ArrayList<String>> entry: schema.entrySet()){
                     JSONObject tempschemaprivileges=new JSONObject();
                     tempschemaprivileges.put("databasename",entry.getKey());
-                    tempschemaprivileges.put("privilegeavailable", "");
-                    tempschemaprivileges.put("privilegeselected",entry.getValue());
+
+                    ArrayList<String> allPrivilege = (ArrayList) privilegeList.clone();
+                    JSONArray privilegeSelected = new JSONArray();
+                    for(String privilege : entry.getValue())
+                    {
+                        JSONArray privilegeJSONObject = new JSONArray();
+                        privilegeSelected.put(privilegeJSONObject.put(privilege));
+
+                        allPrivilege.remove(privilege);
+                    }
+
+                    JSONArray privilegeAvailable = new JSONArray();
+                    for(String privilege : allPrivilege)
+                    {
+                        JSONArray privilegeJSONObject = new JSONArray();
+                        privilegeAvailable.put(privilegeJSONObject.put(privilege));
+                    }
+
+                    tempschemaprivileges.put("privilegeavailable", privilegeAvailable);
+                    tempschemaprivileges.put("privilegeselected",privilegeSelected);
                     schemaprivileges.put(tempschemaprivileges);
                 }
                 rs.close();
@@ -125,10 +155,12 @@ public class GetUserInfo extends GetJSONObjectBase{
                 ps=(PreparedStatement) conn.prepareStatement(sql);
                 rs=ps.executeQuery();
                 if(rs.next()){
-                    userlimits.put(rs.getString(1));
-                    userlimits.put(rs.getString(2));
-                    userlimits.put(rs.getString(3));
-                    userlimits.put(rs.getString(4));
+                    JSONObject userLimitsObject = new JSONObject();
+                    userLimitsObject.put("max_questions",rs.getString(1));
+                    userLimitsObject.put("max_updates",rs.getString(2));
+                    userLimitsObject.put("max_connections",rs.getString(3));
+                    userLimitsObject.put("max_user_connections",rs.getString(4));
+                    userlimits.put(userLimitsObject);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
