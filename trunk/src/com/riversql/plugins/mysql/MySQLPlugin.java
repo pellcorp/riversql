@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.riversql.IDManager;
+import com.riversql.actions.GetJSONObjectInterface;
 import com.riversql.databases.DialectFactory;
 import com.riversql.dbtree.CatalogNode;
 import com.riversql.dbtree.DatabaseNode;
@@ -23,22 +24,7 @@ import com.riversql.dbtree.SchemaNode;
 import com.riversql.dbtree.TableNode;
 import com.riversql.plugin.BasePluginType;
 import com.riversql.plugin.Plugin;
-import com.riversql.plugins.mysql.actions.CreateDBDDL;
-import com.riversql.plugins.mysql.actions.DropTable;
-import com.riversql.plugins.mysql.actions.EmptyTable;
-import com.riversql.plugins.mysql.actions.GetCollations;
-import com.riversql.plugins.mysql.actions.GetUserInfo;
-import com.riversql.plugins.mysql.actions.GetUserPrivileges;
-import com.riversql.plugins.mysql.actions.RenameTable;
-import com.riversql.plugins.mysql.actions.ShowCharacterSets;
-import com.riversql.plugins.mysql.actions.ShowCollations;
-import com.riversql.plugins.mysql.actions.ShowDatabases;
-import com.riversql.plugins.mysql.actions.ShowEngines;
-import com.riversql.plugins.mysql.actions.ShowPrivileges;
-import com.riversql.plugins.mysql.actions.ShowProcesses;
-import com.riversql.plugins.mysql.actions.ShowStatus;
-import com.riversql.plugins.mysql.actions.ShowTableStatus;
-import com.riversql.plugins.mysql.actions.ShowVariables;
+import com.riversql.plugins.mysql.actions.*;
 
 public class MySQLPlugin implements Plugin {
 
@@ -299,8 +285,18 @@ public class MySQLPlugin implements Plugin {
 	public JSONObject executeAction(HttpServletRequest request,
 			HttpServletResponse response, EntityManager em, EntityTransaction et)
 			throws Exception {
-		String method=request.getParameter("method");
+		String className=request.getParameter("class");
+                String method=request.getParameter("method");
 		String id=request.getParameter("id");
+
+                if(className!=null && className.length()>0)
+                {
+                    Class getJSONObject = Class.forName("com.riversql.plugins.mysql.actions."+className);
+                    GetJSONObjectInterface getJSONObjectInterface = (GetJSONObjectInterface)getJSONObject.newInstance();
+                    getJSONObjectInterface.init(request, response, em, et);
+                    return getJSONObjectInterface.execute();
+                }
+
 		if("showStatus".equals(method)){
 			DatabaseNode dn=(DatabaseNode)IDManager.get().get(id);
 			dn.getConn();
@@ -365,10 +361,6 @@ public class MySQLPlugin implements Plugin {
 			TableNode tn=(TableNode)IDManager.get().get(id);
 			DropTable dt=new DropTable(tn.getConn(), tableName);
 			return dt.execute();
-		}
-                else if("getUserInfo".equals(method)){
-			BasePluginType node=(BasePluginType)IDManager.get().get(id);
-			return new GetUserInfo(node.getConn(),node).execute();
 		}
                 else if("getUserPrivileges".equals(method)){
 			BasePluginType node=(BasePluginType)IDManager.get().get(id);

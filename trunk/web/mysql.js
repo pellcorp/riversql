@@ -1,40 +1,31 @@
 
 function mysql_editUser(id,tableName,node)
 {
-    var userInfoDef = Ext.data.Record.create( [ {
-		name :'username',
-		type :'string'
-	}, {
-		name :'host',
-		type :'string'
-	}, {
-		name :'fullname',
-		type :'string'
-	}, {
-		name :'description',
-		type :'string'
-	}, {
-		name :'email',
-		type :'string'
-	} ]);
-
     var userInfo_reader = new Ext.data.JsonReader( {
-            root :'result.userinfos',
-            id :'username'
-            }, userInfoDef);
+            root :'result.userinfos'
+            },
+            [{
+                name :'username',
+                mapping :'username',
+                type :'string'
+            }, {
+                name :'host',
+                mapping :'host',
+                type :'string'
+            }, {
+                name :'fullname',
+                mapping :'fullname',
+                type :'string'
+            }, {
+                name :'description',
+                mapping :'description',
+                type :'string'
+            }, {
+                name :'email',
+                mapping :'email',
+                type :'string'
+            } ]);
 
-    var userInfo_store = new Ext.data.Store( {
-            proxy :new Ext.data.HttpProxy( {
-                    url :'do?action=pluginAction&pluginName=MySQLPlugin&method=getUserInfo&id=' + node.id,
-                    method :'post'
-            }),
-            reader :userInfo_reader
-    });
-    
-    
-    //alert('test11');
-    //alert(userInfo_reader.get('username').toString());
-    //alert('test3');
 
     var dialogTabPanel = new Ext.TabPanel( {
             autoTabs :true,
@@ -49,7 +40,7 @@ function mysql_editUser(id,tableName,node)
             labelWidth :95,
             onSubmit :Ext.emptyFn,
             baseCls :'x-plain',
-            ds:userInfo_reader,
+            reader :userInfo_reader,
             items: [{
                 xtype:'fieldset',
                 title: 'Login Information',
@@ -57,10 +48,12 @@ function mysql_editUser(id,tableName,node)
                 defaults: {width: 210},
                 defaultType: 'textfield',
                 collapsible: true,
+                id: 'psdarea',
                 items :[{
                         fieldLabel: 'User Name',
                         name: 'username',
-                        allowBlank:false
+                        allowBlank:false,
+                        id: 'username'
                     },{
                         fieldLabel: 'Password',
                         name: 'pass',
@@ -72,7 +65,8 @@ function mysql_editUser(id,tableName,node)
                         initialPassField: 'pass'
                     }, {
                         fieldLabel: 'Host',
-                        name: 'host'
+                        name: 'host',
+                        id: 'host'
                     }
                 ]
             },{
@@ -82,70 +76,127 @@ function mysql_editUser(id,tableName,node)
                 defaults: {width: 210},
                 defaultType: 'textfield',
                 collapsible: true,
+                id: 'userarea',
                 items :[{
                         fieldLabel: 'Full Name',
-                        name: 'fullName'
+                        name: 'fullname',
+                        id: 'fullname'
                     },{
                         fieldLabel: 'Description',
-                        name: 'description'
+                        name: 'description',
+                        id: 'description'
                     },{
                         fieldLabel: 'Email',
                         name: 'email',
-                        vtype:'email'
+                        vtype:'email',
+                        id: 'email'
                     }
                 ]
             }]
     });
 
+    userInfo.form.load({
+        url : 'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userInfo&id=' + node.id,
+        method :'post',
+        waitMsg : 'Loading User Info...',
+        success : function() {
+
+        },
+        failure: function()
+        {
+
+        }
+    });
+
+    var privilegeTableDef = Ext.data.Record.create( [ {
+        name :'databasename',
+        type :'string'
+    }, {
+        name :'privilegeavailable',
+        type :'string'
+    }, {
+        name :'privilegeselected',
+        type :'string'
+    } ]);
+
+    var dsPrivilegeTable = new Ext.data.Store( {
+        proxy :new Ext.data.HttpProxy( {
+            url : 'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=schemaprivileges&id=' + node.id,
+            method :'post'
+        }),
+        reader :new Ext.data.JsonReader( {
+            root :'result.schemaprivileges',
+            id :'databasename'
+        }, privilegeTableDef)
+    });
+
+    var privilegeTableColModel = new Ext.grid.ColumnModel( [ {
+        id :'databasename',
+        header :'Database Name',
+        width :130,
+        dataIndex :'databasename'
+    }]);
+
+    privilegeTableColModel.defaultSortable = false;
+
+    var privilegeSelectorDef = Ext.data.Record.create( [ {
+        name :'privilegename',
+        type :'string'
+    } ]);
+
     var ds = new Ext.data.ArrayStore({
-        data: [['123','One Hundred Twenty Three'],
-            ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
-            ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
-        fields: ['code','name'],
+        data: [['One Hundred Twenty Three'],
+            ['One'], ['Two']],
+        fields: privilegeSelectorDef,
         sortInfo: {
-            field: 'name',
+            field: 'privilegename',
             direction: 'ASC'
         }
     });
 
-    var columnSelector = new Ext.ux.ItemSelector( {
-            name :"itemselector",
-            dataFields : ['code','name'],
-            toData : [['10','Ten'],['8', 'Eight']],
+    var dataselected1 = new privilegeSelectorDef( { privilegename :'140AAA' });
+
+    var dataselected = new privilegeSelectorDef( { privilegename :'140' });
+
+    ds.addSorted(dataselected1);
+
+    var privilegeSelector = new Ext.ux.ItemSelector( {
+            name :"privilegeSelector",
+            id : "privilegeSelector",
+            dataFields : ['privilegename'],
+            toData : [['Ten'],['ABCD']],
             msWidth :150,
             msHeight :350,
             columnWidth: .66,
-            valueField :"code",
-            displayField :"name",
+            valueField :"privilegename",
+            displayField :"privilegename",
             imagePath: 'icons/images/',
             toLegend :"Selected",
             fromLegend :"Available",
             fromStore :ds
     });
-    
-    var myData = [
-        ['MySql'],['MyDB'],['Test'],['Info']
-        ]
-    var databaseList = new Ext.data.ArrayStore({
-        fields: [
-           {name: 'database'}
-        ]
-    });
-    databaseList.loadData(myData);
 
     var grid = new Ext.grid.GridPanel({
-        store: databaseList,
-        columns: [
-            {id:'database',header: 'Database', width: 120, sortable: true, dataIndex: 'database'}
-        ],
-        stripeRows: true,
-        autoExpandColumn: 'database',
+        id :'databaseGrid',
+        ds :dsPrivilegeTable,
+	cm :privilegeTableColModel,
+
         columnWidth: .33,
         height: 350,
         width: 150,
-        // config options for stateful behavior
-        stateful: true,
-        stateId: 'grid'
+
+        trackMouseOver :true,
+        title :'Database Privilege',
+        selModel :new Ext.grid.RowSelectionModel( {
+            singleSelect :true,
+            listeners: {
+                rowselect: function(selModel, row, rec) {
+                    alert("test1");
+                    Ext.getCmp("privilegeSelector").toStore.addSorted(dataselected);
+                    alert(Ext.getCmp("privilegeSelector").toData);
+                }
+            }
+        })
     });
 
     var privilegeInfo = new Ext.form.FormPanel({
@@ -156,7 +207,7 @@ function mysql_editUser(id,tableName,node)
         items:[
             grid
             ,
-            columnSelector
+            privilegeSelector
             ]
     });
 
@@ -224,9 +275,36 @@ function mysql_editUser(id,tableName,node)
     dialog.addButton('Done', onCreateUserSubmit, dialog);
 
     dialog.show();
-    
-    userInfo_store.load();
 
+    dsPrivilegeTable.load();
+    
+  /*
+    //userInfo_store.load();
+    //userInfo_store.on('load', loadUserInfo);
+    var userInfo_store = new Ext.data.Store( {
+        proxy :new Ext.data.HttpProxy( {
+                url :'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userInfo&id=' + node.id,
+                method :'post'
+        }),
+        reader :userInfo_reader
+    });
+  
+    function loadUserInfo() {
+            alert('test11');
+            alert('Database:'+userInfo_store.getCount());
+            alert('Database:'+userInfo_store.getAt(0).get('username'));
+            userInfo.get('psdarea').get('username').setValue(userInfo_store.getAt(0).get('username'));
+            userInfo.get('psdarea').get('host').setValue(userInfo_store.getAt(0).get('host'));
+            userInfo.get('userarea').get('fullname').setValue(userInfo_store.getAt(0).get('fullname'));
+            userInfo.get('userarea').get('description').setValue(userInfo_store.getAt(0).get('description'));
+            userInfo.get('userarea').get('email').setValue(userInfo_store.getAt(0).get('email'));
+
+            alert('test3');
+    }
+    //userInfo.getForm().load();
+    //userInfo.getForm().load();
+    //userInfo_store.load();
+    */
 }
 
 function mysql_createNewUser(id,tableName,node)
