@@ -95,28 +95,15 @@ function mysql_editUser(id,tableName,node)
             }]
     });
 
-    userInfo.form.load({
-        url : 'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userInfo&id=' + node.id,
-        method :'post',
-        waitMsg : 'Loading User Info...',
-        success : function() {
-
-        },
-        failure: function()
-        {
-
-        }
-    });
-
     var privilegeTableDef = Ext.data.Record.create( [ {
         name :'databasename',
         type :'string'
     }, {
         name :'privilegeavailable',
-        type :'string'
+        type :'array'
     }, {
         name :'privilegeselected',
-        type :'string'
+        type :'array'
     } ]);
 
     var dsPrivilegeTable = new Ext.data.Store( {
@@ -145,8 +132,7 @@ function mysql_editUser(id,tableName,node)
     } ]);
 
     var ds = new Ext.data.ArrayStore({
-        data: [['One Hundred Twenty Three'],
-            ['One'], ['Two']],
+        data: [[]],
         fields: privilegeSelectorDef,
         sortInfo: {
             field: 'privilegename',
@@ -154,17 +140,11 @@ function mysql_editUser(id,tableName,node)
         }
     });
 
-    var dataselected1 = new privilegeSelectorDef( { privilegename :'140AAA' });
-
-    var dataselected = new privilegeSelectorDef( { privilegename :'140' });
-
-    ds.addSorted(dataselected1);
-
     var privilegeSelector = new Ext.ux.ItemSelector( {
             name :"privilegeSelector",
             id : "privilegeSelector",
             dataFields : ['privilegename'],
-            toData : [['Ten'],['ABCD']],
+            toData : [[]],
             msWidth :150,
             msHeight :350,
             columnWidth: .66,
@@ -186,14 +166,13 @@ function mysql_editUser(id,tableName,node)
         width: 150,
 
         trackMouseOver :true,
-        title :'Database Privilege',
         selModel :new Ext.grid.RowSelectionModel( {
             singleSelect :true,
             listeners: {
                 rowselect: function(selModel, row, rec) {
-                    alert("test1");
-                    Ext.getCmp("privilegeSelector").toStore.addSorted(dataselected);
-                    alert(Ext.getCmp("privilegeSelector").toData);
+                    //Ext.getCmp("privilegeSelector").toStore.addSorted(dataselected);
+                    Ext.getCmp("privilegeSelector").toStore.loadData(rec.get("privilegeselected"));
+                    Ext.getCmp("privilegeSelector").fromStore.loadData(rec.get("privilegeavailable"));
                 }
             }
         })
@@ -211,21 +190,34 @@ function mysql_editUser(id,tableName,node)
             ]
     });
 
+    var resource_reader = new Ext.data.JsonReader( {
+            root :'result.userlimits'
+            },
+            [{
+                name :'max_questions',
+                mapping :'max_questions',
+                type :'int'
+            }, {
+                name :'max_updates',
+                mapping :'max_updates',
+                type :'int'
+            }, {
+                name :'max_connections',
+                mapping :'max_connections',
+                type :'int'
+            }, {
+                name :'max_user_connections',
+                mapping :'max_user_connections',
+                type :'int'
+            } ]); //max_questions,max_updates,max_connections,max_user_connections
 
-/*
-    var privilegeInfo = new Ext.form.FormPanel( {
-            title: 'User Privilege',
-            labelWidth :95,
-            onSubmit :Ext.emptyFn,
-            baseCls :'x-plain'
-    });
-*/
     var resourceInfo = new Ext.form.FormPanel( {
             title: 'Resource',
             bodyStyle: 'padding:10px;',
             labelWidth :95,
             onSubmit :Ext.emptyFn,
             baseCls :'x-plain',
+            reader : resource_reader,
 
             items: [{
                 xtype:'fieldset',
@@ -276,35 +268,34 @@ function mysql_editUser(id,tableName,node)
 
     dialog.show();
 
-    dsPrivilegeTable.load();
-    
-  /*
-    //userInfo_store.load();
-    //userInfo_store.on('load', loadUserInfo);
-    var userInfo_store = new Ext.data.Store( {
-        proxy :new Ext.data.HttpProxy( {
-                url :'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userInfo&id=' + node.id,
-                method :'post'
-        }),
-        reader :userInfo_reader
-    });
-  
-    function loadUserInfo() {
-            alert('test11');
-            alert('Database:'+userInfo_store.getCount());
-            alert('Database:'+userInfo_store.getAt(0).get('username'));
-            userInfo.get('psdarea').get('username').setValue(userInfo_store.getAt(0).get('username'));
-            userInfo.get('psdarea').get('host').setValue(userInfo_store.getAt(0).get('host'));
-            userInfo.get('userarea').get('fullname').setValue(userInfo_store.getAt(0).get('fullname'));
-            userInfo.get('userarea').get('description').setValue(userInfo_store.getAt(0).get('description'));
-            userInfo.get('userarea').get('email').setValue(userInfo_store.getAt(0).get('email'));
+    userInfo.form.load({
+        url : 'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userInfo&id=' + node.id,
+        method :'post',
+        waitMsg : 'Loading User Info...',
+        success : function() {
 
-            alert('test3');
-    }
-    //userInfo.getForm().load();
-    //userInfo.getForm().load();
-    //userInfo_store.load();
-    */
+        },
+        failure: function()
+        {
+
+        }
+    });
+
+    dsPrivilegeTable.load();
+
+    resourceInfo.form.load({
+        url : 'do?action=pluginAction&pluginName=MySQLPlugin&class=GetUserInfo&method=userlimits&id=' + node.id,
+        method :'post',
+        waitMsg : 'Loading User Limits...',
+        success : function() {
+
+        },
+        failure: function()
+        {
+
+        }
+    });
+    
 }
 
 function mysql_createNewUser(id,tableName,node)
