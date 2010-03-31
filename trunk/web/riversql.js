@@ -2286,6 +2286,64 @@ function createDataSourcesPage(){
 	createTabPage("do?action=sourcesPage","icons/transmit.png","Sources");
 }
 
+function createCustomizeExport(){
+	var tabFolder = Ext.getCmp('tabpanelpages');
+
+	var page = new Ext.Panel({
+		autoScroll :true,
+		closable:true,
+		title :"<img src='icons/cd_edit.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Export Table"
+	});
+	tabFolder.add(page);
+	tabFolder.setActiveTab(page);
+}
+
+function createCustomizeImport(){
+	var tabFolder = Ext.getCmp('tabpanelpages');
+
+        var fileUploadPanel = new Ext.FormPanel({
+            fileUpload: true,
+            width: 350,
+            frame: true,
+            title: 'Import',
+            bodyStyle: 'padding: 10px 10px 0 10px;',
+            labelWidth: 50,
+            items: [{
+                xtype: 'fileuploadfield',
+                id: 'form-file',
+                emptyText: 'Select a CSV File',
+                fieldLabel: 'CSV File',
+                name: 'form-file',
+                buttonText: '',
+                buttonCfg: {
+                    iconCls: 'upload-icon'
+                }
+            }],
+            buttons: [{
+                text: 'Next...',
+                handler: function(){
+                    if(fileUploadPanel.getForm().isValid()){
+                            fileUploadPanel.getForm().submit({
+                                url: 'do?action=import',
+                                waitMsg: 'Uploading your file...',
+                                success: function(fileUploadPanel, o){
+                                    msg('Success', 'Upload file "'+o.result.filename+'" succeed');
+                                }
+                            });
+                    }
+                }
+            },{
+                text: 'Reset',
+                handler: function(){
+                    fileUploadPanel.getForm().reset();
+                }
+            }]
+        });
+
+	tabFolder.add(fileUploadPanel);
+	tabFolder.setActiveTab(fileUploadPanel);
+}
+
 function createExportTablePage(node){
 	createTabPage("do?action=exportTablePage&id="+node.id,"icons/cd_edit.png","Export Table "+node.attributes.qname);
 }

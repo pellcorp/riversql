@@ -13,6 +13,7 @@
 <tr><td style="padding-right:1em;">Rows to be exported</td><td><input type="text" name="count" value="${rowCount}"/></td></tr>
 <tr><td style="padding-right:1em;padding-left:2em">PDF</td><td><input type="radio" name="format" value="pdf" checked="checked"/> </td></tr>
 <tr><td style="padding-right:1em;padding-left:2em">MS Excel</td><td><input type="radio" name="format" value="excel" /></td></tr>
+<tr><td style="padding-right:1em;padding-left:2em">CSV</td><td><input type="radio" name="format" value="csv" /></td></tr>
 <tr><td colspan="2" align="right" style="padding:20px"><input type="submit" value="Proceed to export...." onclick="this.disabled='true';submit();"/></td></tr>
 </table>
 </form>
