@@ -5,8 +5,8 @@
 		<img src="icons/page_edit.png"  style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="newEditor('')">Sql Editor</a> <br/>
 		<img src="icons/table_relationship.png"  style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="new RelViewer()">Tables Viewer</a>  <br/>
 		<img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Data Sources</a><br/>
-                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Export</a><br/>
-                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Import</a><br/>
+                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createCustomizeExport()">Export</a><br/>
+                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createCustomizeImport()">Import</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Processes</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Synchronize(Data Move)</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Query Builder</a><br/>

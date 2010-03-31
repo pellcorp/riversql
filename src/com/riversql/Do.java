@@ -44,6 +44,7 @@ import com.riversql.actions.DeleteSource;
 import com.riversql.actions.DoExport;
 import com.riversql.actions.ExcelExport;
 import com.riversql.actions.ExecuteSQL;
+import com.riversql.actions.Export;
 import com.riversql.actions.ExportTablePage;
 import com.riversql.actions.GenerateDDLAlterTable;
 import com.riversql.actions.GenerateDDLCreateIndex;
@@ -69,6 +70,7 @@ import com.riversql.actions.GetTableColumnsForAlterTable;
 import com.riversql.actions.GetTableIndexesForAlterTable;
 import com.riversql.actions.GetTree;
 import com.riversql.actions.GetTypesAlterTable;
+import com.riversql.actions.Import;
 import com.riversql.actions.PdfExport;
 import com.riversql.actions.Ping;
 import com.riversql.actions.PluginAction;
@@ -144,6 +146,8 @@ public class Do extends HttpServlet {
 		tmp.put("connect",Connect.class);
 		
 		tmp.put("execute",ExecuteSQL.class);
+                tmp.put("export",Export.class);
+                tmp.put("import",Import.class);
 		jsonActionMap=Collections.unmodifiableMap(tmp);
 		
 		HashMap<String, Class<? extends IPageAction>> tmp2 = new HashMap<String, Class<? extends IPageAction>>();
@@ -157,7 +161,7 @@ public class Do extends HttpServlet {
 		tmp2.put("sourcesPage",SourcesPage.class);
 		tmp2.put("exportTablePage", ExportTablePage.class);
 		tmp2.put("doExport",DoExport.class);
-		
+                
 		pageActionMap=Collections.unmodifiableMap(tmp2);
 		
 		HashMap<String, Class<? extends IFileUploadAction>> tmp3 = new HashMap<String, Class<? extends IFileUploadAction>>();

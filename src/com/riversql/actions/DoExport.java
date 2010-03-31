@@ -14,6 +14,7 @@ import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
 import com.riversql.IDManager;
 import com.riversql.IPageAction;
 import com.riversql.actions.export.ITableExporter;
+import com.riversql.actions.export.impl.CSVTableExporter;
 import com.riversql.actions.export.impl.ExcelTableExporter;
 import com.riversql.actions.export.impl.PDFTableExporter;
 import com.riversql.dbtree.TableNode;
@@ -41,7 +42,9 @@ public class DoExport implements IPageAction {
 		ITableExporter tExp=null;
 		if("excel".equals(format))
 			tExp=new ExcelTableExporter(tn.getQualifiedName());
-		else
+                else if("csv".equals(format))
+			tExp=new CSVTableExporter(tn.getQualifiedName());
+                else
 			tExp=new PDFTableExporter(tn.getQualifiedName());
 		
 		try{

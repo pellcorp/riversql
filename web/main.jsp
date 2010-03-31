@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" type="text/css" href="ext3.1.0/resources/css/riversql-min.css"/>
         <link rel="stylesheet" type="text/css" href="MultiSelect.css"/>
+        <link rel="stylesheet" type="text/css" href="fileuploadfield.css"/>
 	<link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
 
     <title>RiverSQL</title>
@@ -169,6 +170,8 @@
 <script type="text/javascript" src="dbgraphics.js"></script>
 <script type="text/javascript" src="gridFactories.js"></script>
 <script type="text/javascript" src="mysql.js"></script>
+
+<script type="text/javascript" src="FileUploadField.js"></script>
 
 <!--<script type="text/javascript" src="build/riversql_all-min.js"></script>  -->
 <!-- 
