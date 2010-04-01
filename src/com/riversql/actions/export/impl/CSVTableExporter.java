@@ -19,6 +19,9 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CSVTableExporter implements ITableExporter {
 
@@ -35,6 +38,44 @@ public class CSVTableExporter implements ITableExporter {
 	public CSVTableExporter(String qualifiedName) {
 		this.qualifiedName = qualifiedName;
 		this.sb = new StringBuffer();
+	}
+
+        public CSVTableExporter(int columnCount, JSONArray meta){
+		this("");
+		formatters=new IColumnFormatter[columnCount];
+		for(int i=0;i<columnCount;i++){
+			try {
+				JSONObject row = meta.getJSONObject(i);
+				String label=row.getString("l");
+				sb.append(label);
+
+				final String align=row.getString("al");
+				formatters[i]=new IColumnFormatter(){
+
+					public Object format(Object obj) {
+						if(obj!=null)
+							return obj.toString();
+						return null;
+					}
+
+					public int getAlign() {
+						if("right".equals(align))
+							return Element.ALIGN_RIGHT;
+						return Element.ALIGN_LEFT;
+					}
+
+				};
+			} catch (JSONException e) {
+			}
+                        if(i==columnCount-1)
+                        {
+                            sb.append("\n");
+                        }
+                        else
+                        {
+                            sb.append(separator);
+                        }
+		}
 	}
 
 	public void configure(ResultSetMetaData rsmd)  {
@@ -148,8 +189,11 @@ public class CSVTableExporter implements ITableExporter {
                                 sb.append(rsmd.getColumnLabel(i+1));
                                 if(i==columnCount-1)
                                 {
+                                    sb.append("\n");
+                                }
+                                else
+                                {
                                     sb.append(separator);
-                                     sb.append("\n");
                                 }
 			}
                        

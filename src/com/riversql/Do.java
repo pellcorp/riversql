@@ -39,6 +39,7 @@ import com.riversql.actions.CommitConnection;
 import com.riversql.actions.ConfigPage;
 import com.riversql.actions.Connect;
 import com.riversql.actions.CreateSource;
+import com.riversql.actions.CsvExport;
 import com.riversql.actions.DeleteDriver;
 import com.riversql.actions.DeleteSource;
 import com.riversql.actions.DoExport;
@@ -167,6 +168,7 @@ public class Do extends HttpServlet {
 		HashMap<String, Class<? extends IFileUploadAction>> tmp3 = new HashMap<String, Class<? extends IFileUploadAction>>();
 		tmp3.put("excelExport",ExcelExport.class );
 		tmp3.put("pdfExport", PdfExport.class);
+                tmp3.put("csvExport", CsvExport.class);
 		fileUploadActionMap=Collections.unmodifiableMap(tmp3);
 	}
 	
@@ -224,6 +226,8 @@ public class Do extends HttpServlet {
 		    }
 	    }
 	    ServletRequestContext requestContext=new ServletRequestContext(req);
+            System.out.println(req.getParameter("action")+"=====================");
+            System.out.println(FileUploadBase.isMultipartContent(requestContext)+"=====================");
 	    if(!FileUploadBase.isMultipartContent(requestContext)){
 		    String action=req.getParameter("action");
 			if(action.equals("main")){

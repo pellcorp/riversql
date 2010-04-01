@@ -1798,28 +1798,52 @@ function sqlSuccessful(response, options) {
 						
 					}
 				});
-				var exportPDFButton=new Ext.Toolbar.Button({
+				var exportCSVButton=new Ext.Toolbar.Button({
+					cls :'x-btn-icon',
+					icon :'icons/database_table.png.png',
+					tooltip :'<b>Export</b><br/>Export to CSV',
+					handler : function() {
+						if (!Ext.fly('frmCsvDummy')) {
+                                                    var frm = document.createElement('form');
+                                                    frm.id = 'frmCsvDummy';
+                                                    frm.name = id;
+                                                    frm.className = 'x-hidden';
+                                                    frm.target='_blank';
+                                                    document.body.appendChild(frm);
+                                                }
+                                                Ext.Ajax.request({
+                                                    url: 'do',
+                                                    method : 'POST',
+                                                    form: Ext.fly('frmCsvDummy'),
+                                                    isUpload:true,
+                                                    params: {action:'csvExport',meta:Ext.util.JSON.encode(meta),data:Ext.util.JSON.encode(myData),info:Ext.util.JSON.encode(info2)}
+                                                });
+					}
+				});
+
+                                var exportPDFButton=new Ext.Toolbar.Button({
 					cls :'x-btn-icon',
 					icon :'icons/page_white_acrobat.png',
 					tooltip :'<b>Export</b><br/>Export to PDF',
 					handler : function() {
 						if (!Ext.fly('frmPdfDummy')) {
-	                        var frm = document.createElement('form');
-	                        frm.id = 'frmPdfDummy';
-	                        frm.name = id;
-	                        frm.className = 'x-hidden';
-	                        frm.target='_blank';
-	                        document.body.appendChild(frm);
-	                    }
-	                    Ext.Ajax.request({
-	                        url: 'do',
-	                        method : 'POST',
-	                        form: Ext.fly('frmPdfDummy'),
-	                        isUpload:true,
-	                        params: {action:'pdfExport',meta:Ext.util.JSON.encode(meta),data:Ext.util.JSON.encode(myData),info:Ext.util.JSON.encode(info2)}
-	                    });
+                                                    var frm = document.createElement('form');
+                                                    frm.id = 'frmPdfDummy';
+                                                    frm.name = id;
+                                                    frm.className = 'x-hidden';
+                                                    frm.target='_blank';
+                                                    document.body.appendChild(frm);
+                                                }
+                                                Ext.Ajax.request({
+                                                    url: 'do',
+                                                    method : 'POST',
+                                                    form: Ext.fly('frmPdfDummy'),
+                                                    isUpload:true,
+                                                    params: {action:'pdfExport',meta:Ext.util.JSON.encode(meta),data:Ext.util.JSON.encode(myData),info:Ext.util.JSON.encode(info2)}
+                                                });
 					}
 				});
+
 				var exportExcelButton=new Ext.Toolbar.Button({
 					cls :'x-btn-icon',
 					icon :'icons/page_white_excel.png',
@@ -1827,24 +1851,24 @@ function sqlSuccessful(response, options) {
 					handler : function() {				
 						var exportContent=resultGrid.getExcelXml(true);
 						if (Ext.isGecko3) {
-	                        document.location='data:application/vnd.ms-excel;Content-Disposition:attachment;filename=export_filename.xls;name=export.xls;base64,' + Base64.encode(exportContent);
-	                    }
+                                                    document.location='data:application/vnd.ms-excel;Content-Disposition:attachment;filename=export_filename.xls;name=export.xls;base64,' + Base64.encode(exportContent);
+                                                }
 						else{
 							if (!Ext.fly('frmDummy')) {
-		                        var frm = document.createElement('form');
-		                        frm.id = 'frmDummy';
-		                        frm.name = id;
-		                        frm.className = 'x-hidden';
-		                        frm.target='_blank';
-		                        document.body.appendChild(frm);
-		                    }
-		                    Ext.Ajax.request({
-		                        url: 'do',
-		                        method : 'POST',
-		                        form: Ext.fly('frmDummy'),
-		                        isUpload:true,
-		                        params: {action:'excelExport',ex: resultGrid.getExcelXml(true)}
-		                    });
+                                                            var frm = document.createElement('form');
+                                                            frm.id = 'frmDummy';
+                                                            frm.name = id;
+                                                            frm.className = 'x-hidden';
+                                                            frm.target='_blank';
+                                                            document.body.appendChild(frm);
+                                                        }
+                                                    Ext.Ajax.request({
+                                                        url: 'do',
+                                                        method : 'POST',
+                                                        form: Ext.fly('frmDummy'),
+                                                        isUpload:true,
+                                                        params: {action:'excelExport',ex: resultGrid.getExcelXml(true)}
+                                                    });
 						}
                     
 					}
@@ -1871,7 +1895,7 @@ function sqlSuccessful(response, options) {
 						xtype :'tbseparator'
 					},printButton,{
 						xtype :'tbseparator'
-					},exportExcelButton,exportPDFButton ],
+					},exportExcelButton,exportPDFButton,exportCSVButton ],
 					queryID :queryID
 
 				});
@@ -2312,8 +2336,9 @@ function createCustomizeImport(){
                 xtype: 'fileuploadfield',
                 id: 'form-file',
                 emptyText: 'Select a CSV File',
+                width: 300,
                 fieldLabel: 'CSV File',
-                name: 'form-file',
+                name: 'csvfile',
                 buttonText: '',
                 buttonCfg: {
                     iconCls: 'upload-icon'
@@ -2326,8 +2351,8 @@ function createCustomizeImport(){
                             fileUploadPanel.getForm().submit({
                                 url: 'do?action=import',
                                 waitMsg: 'Uploading your file...',
-                                success: function(fileUploadPanel, o){
-                                    msg('Success', 'Upload file "'+o.result.filename+'" succeed');
+                                success: function(){
+                                    msg('Success', 'Upload file succeed');
                                 }
                             });
                     }
