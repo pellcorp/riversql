@@ -69,7 +69,7 @@ public class Import implements JSONAction {
             try {
                 fileItem.write(new File(u_name));
                 System.out.println("Upload succeed with name: " + prefix + "." + t_ext
-                    + " &nbsp;&nbsp;fielzone: " + size + "KB<p />");
+                    + " &nbsp;&nbsp;fielzone: " + size + "<p />");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -77,7 +77,7 @@ public class Import implements JSONAction {
 
         JSONObject results=new JSONObject();
         results.put("filename",file_name);
-
+        System.out.println("test5=============="+results.toString());
         return results;
     }
     
