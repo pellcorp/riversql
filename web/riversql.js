@@ -1798,9 +1798,10 @@ function sqlSuccessful(response, options) {
 						
 					}
 				});
+                                
 				var exportCSVButton=new Ext.Toolbar.Button({
 					cls :'x-btn-icon',
-					icon :'icons/database_table.png.png',
+					icon :'icons/database_table.png',
 					tooltip :'<b>Export</b><br/>Export to CSV',
 					handler : function() {
 						if (!Ext.fly('frmCsvDummy')) {
@@ -1812,7 +1813,7 @@ function sqlSuccessful(response, options) {
                                                     document.body.appendChild(frm);
                                                 }
                                                 Ext.Ajax.request({
-                                                    url: 'do',
+                                                    url: 'do?action=csvExport',
                                                     method : 'POST',
                                                     form: Ext.fly('frmCsvDummy'),
                                                     isUpload:true,
@@ -1835,7 +1836,7 @@ function sqlSuccessful(response, options) {
                                                     document.body.appendChild(frm);
                                                 }
                                                 Ext.Ajax.request({
-                                                    url: 'do',
+                                                    url: 'do?action=pdfExport',
                                                     method : 'POST',
                                                     form: Ext.fly('frmPdfDummy'),
                                                     isUpload:true,
@@ -1847,7 +1848,7 @@ function sqlSuccessful(response, options) {
 				var exportExcelButton=new Ext.Toolbar.Button({
 					cls :'x-btn-icon',
 					icon :'icons/page_white_excel.png',
-					tooltip :'<b>Export</b><br/>Export to Excel (experimental)',
+					tooltip :'<b>Export</b><br/>Export to Excel',
 					handler : function() {				
 						var exportContent=resultGrid.getExcelXml(true);
 						if (Ext.isGecko3) {
@@ -1863,7 +1864,7 @@ function sqlSuccessful(response, options) {
                                                             document.body.appendChild(frm);
                                                         }
                                                     Ext.Ajax.request({
-                                                        url: 'do',
+                                                        url: 'do?action=excelExport',
                                                         method : 'POST',
                                                         form: Ext.fly('frmDummy'),
                                                         isUpload:true,
@@ -2324,35 +2325,102 @@ function createCustomizeExport(){
 
 function createCustomizeImport(){
 	var tabFolder = Ext.getCmp('tabpanelpages');
+        var filename = '';
+        var csvseparator = '';
+        var fileencoding = '';
 
-        var fileUploadPanel = new Ext.FormPanel({
+        var importpage = new Ext.Panel({
+            autoScroll :true,
+            closable:true,
+            title :"<img src='cd_edit.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Import"
+	});
+
+        var uploadstep1 = new Ext.ux.form.FileUploadField({
+            allowBlank: false,
+            id: 'uploadstep1',
+            emptyText: 'Select a CSV File',
+            width: 300,
+            fieldLabel: 'CSV File',
+            name: 'csvfile',
+            buttonText: '',
+            buttonCfg: {
+                iconCls: 'upload-icon'
+            }
+        });
+
+        var fileUploadPanel1 = new Ext.FormPanel({
             fileUpload: true,
-            width: 350,
+            width: 500,
             frame: true,
-            title: 'Import',
+            title: 'Import Step 1',
             bodyStyle: 'padding: 10px 10px 0 10px;',
-            labelWidth: 50,
-            items: [{
-                xtype: 'fileuploadfield',
-                id: 'form-file',
-                emptyText: 'Select a CSV File',
-                width: 300,
-                fieldLabel: 'CSV File',
-                name: 'csvfile',
-                buttonText: '',
-                buttonCfg: {
-                    iconCls: 'upload-icon'
-                }
-            }],
+            labelWidth: 150,
+            items: [
+                {
+                    xtype:          'combo',
+                    name:           'separator',
+                    id:           'separator',
+                    fieldLabel:     'Column Separator',
+                    value:          'comma',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    mode: 'local',
+                    forceSelection: true,
+                    displayField:   'name',
+                    valueField:     'value',
+                    store:          new Ext.data.ArrayStore({
+                        fields : ['value', 'name'],
+                        data   : [
+                            ['comma',   'Comma'],
+                            ['tab',  'Tab'],
+                            ['verticalbar', 'Vertical Bar']
+                        ]
+                    })
+
+                },
+                {
+                    xtype:          'combo',
+                    name:           'fileencoding',
+                    id:           'fileencoding',
+                    fieldLabel:     'File Encoding',
+                    value:          'ascii',
+                    triggerAction: 'all',
+                    mode: 'local',
+                    forceSelection: true,
+                    displayField:   'name',
+                    valueField:     'value',
+                    store:          new Ext.data.ArrayStore({
+                        fields : ['value', 'name'],
+                        data   : [
+                            ['ascii',   'ASCII'],
+                            ['utf8',  'UTF-8'],
+                            ['unicode', 'Unicode']
+                        ]
+                    })
+
+                },
+                uploadstep1],
             buttons: [{
                 text: 'Next...',
                 handler: function(){
-                    if(fileUploadPanel.getForm().isValid()){
-                            fileUploadPanel.getForm().submit({
+                    if(fileUploadPanel1.getForm().isValid()){
+                            fileUploadPanel1.getForm().submit({
                                 url: 'do?action=import',
                                 waitMsg: 'Uploading your file...',
-                                success: function(){
-                                    msg('Success', 'Upload file succeed');
+                                success: function(result, request){
+                                    var jsonobject = Ext.util.JSON.decode(request.response.responseText);
+                                    filename = jsonobject.result.filename;
+                                    csvseparator = Ext.getCmp("separator").getValue();
+                                    fileencoding = Ext.getCmp("fileencoding").getValue();
+                                    //alert("Success"+jsonobject.result.filename);
+                                    fileUploadPanel1.hide();
+                                    fileUploadPanel2.show();
+
+                                },
+                                failure: function(result, request)
+                                {
+                                    var jsonobject = Ext.util.JSON.decode(request.response.responseText);
+                                    alert("upload failed:"+ jsonobject.error);
                                 }
                             });
                     }
@@ -2360,13 +2428,56 @@ function createCustomizeImport(){
             },{
                 text: 'Reset',
                 handler: function(){
-                    fileUploadPanel.getForm().reset();
+                    fileUploadPanel1.getForm().reset();
                 }
             }]
         });
 
-	tabFolder.add(fileUploadPanel);
-	tabFolder.setActiveTab(fileUploadPanel);
+        
+
+        var fileUploadPanel2 = new Ext.FormPanel({
+            fileUpload: true,
+            width: 500,
+            frame: true,
+            hidden: true,
+            title: 'Import Step 2',
+            bodyStyle: 'padding: 10px 10px 0 10px;',
+            labelWidth: 150,
+            items: [{
+                    fieldLabel: 'First Name',
+                    name: 'first',
+                    allowBlank:false
+                },{
+                    fieldLabel: 'Last Name',
+                    name: 'last'
+                }
+            ],
+            buttons: [{
+                text: 'Finish',
+                handler: function(){
+                    if(fileUploadPanel2.getForm().isValid()){
+                            fileUploadPanel2.getForm().submit({
+                                url: 'do?action=import',
+                                waitMsg: 'Uploading your file...',
+                                success: function(result, request){
+                                   
+                                    alert("Success"+csvseparator+fileencoding);
+                                }
+                            });
+                    }
+                }
+            },{
+                text: 'Reset',
+                handler: function(){
+                    fileUploadPanel2.getForm().reset();
+                }
+            }]
+        });
+
+        importpage.add(fileUploadPanel1);
+        importpage.add(fileUploadPanel2);
+	tabFolder.add(importpage);
+	tabFolder.setActiveTab(importpage);
 }
 
 function createExportTablePage(node){

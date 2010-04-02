@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
@@ -21,13 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -162,14 +153,21 @@ public class Do extends HttpServlet {
 		tmp2.put("sourcesPage",SourcesPage.class);
 		tmp2.put("exportTablePage", ExportTablePage.class);
 		tmp2.put("doExport",DoExport.class);
+
+                tmp2.put("excelExport",ExcelExport.class );
+		tmp2.put("pdfExport", PdfExport.class);
+                tmp2.put("csvExport", CsvExport.class);
                 
 		pageActionMap=Collections.unmodifiableMap(tmp2);
-		
+
+                /*
 		HashMap<String, Class<? extends IFileUploadAction>> tmp3 = new HashMap<String, Class<? extends IFileUploadAction>>();
 		tmp3.put("excelExport",ExcelExport.class );
 		tmp3.put("pdfExport", PdfExport.class);
                 tmp3.put("csvExport", CsvExport.class);
 		fileUploadActionMap=Collections.unmodifiableMap(tmp3);
+
+                */
 	}
 	
 	 
@@ -225,146 +223,85 @@ public class Do extends HttpServlet {
 		    	session.setAttribute("shortName", capitalized);
 		    }
 	    }
-	    ServletRequestContext requestContext=new ServletRequestContext(req);
-            System.out.println(req.getParameter("action")+"=====================");
-            System.out.println(FileUploadBase.isMultipartContent(requestContext)+"=====================");
-	    if(!FileUploadBase.isMultipartContent(requestContext)){
-		    String action=req.getParameter("action");
-			if(action.equals("main")){
-				em.close();
-				req.getRequestDispatcher("/main.jsp").forward(req, resp);
-				return;
-			}
-			
-			Class<? extends JSONAction> iactionclass=jsonActionMap.get(action);
-			if(iactionclass!=null){
-				JSONObject obj=new JSONObject();
-				PrintWriter writer=resp.getWriter();
-				try {
-					JSONAction iaction=iactionclass.newInstance();
-					BeanUtils.populate(iaction, req.getParameterMap());
-					
-					et=em.getTransaction();
-					et.begin();
-					JSONObject objsr=iaction.execute(req, resp, em,et);
-					if(et.isActive())
-						et.commit();
-					resp.setHeader("Content-Type", "text/html;charset=ISO-8859-1");
-					obj.put("success",true);
-					if(objsr!=null)
-						obj.put("result",objsr);
-				}
-				catch (Exception e) {
-					//e.printStackTrace();
-					if(et!=null && et.isActive())
-						et.rollback();
-					try {
-						
-						obj.put("success",false);
-						obj.put("error",e.toString());
-					} catch (JSONException e1) {
-					}
-					
-				}finally{
-					IDManager.set(null);
-					if(em!=null)
-						em.close();
-				}
-				writer.write(obj.toString());
-			}else{
-				Class<? extends IPageAction> iPageActionclass=pageActionMap.get(action);
-				if(iPageActionclass!=null){
-					try{
-						IPageAction iPageAction=iPageActionclass.newInstance();
-						BeanUtils.populate(iPageAction, req.getParameterMap());
-						et=em.getTransaction();
-						et.begin();
-						iPageAction.execute(req, resp, em,et);
-						et.commit();
-					}catch(Exception e){
-						//e.printStackTrace();
-						//TODO return page with error
-						if(et!=null && et.isActive())
-							et.rollback();
-						try{
-							req.setAttribute("pageid", req.getParameter("pageid"));
-							req.setAttribute("emsg",e.getMessage());
-							StringWriter sw = new StringWriter();
-							PrintWriter pw = new PrintWriter(sw);
-							e.printStackTrace(pw);
-							pw.close();sw.close();
-							
-							req.setAttribute("error",sw.toString());
-							req.getRequestDispatcher("error.jsp").forward(req, resp);
-						}catch(Exception e1){}
-					}finally{
-						IDManager.set(null);
-						if(em!=null)
-							em.close();
-					}
-				}else
-					if(em!=null)
-						em.close();
-			}
-	    }
-	    else{
-	    	FileItemFactory factory = new DiskFileItemFactory();
-			ServletFileUpload upload = new ServletFileUpload(factory);
-			 
-			
-			List<FileItem> items;
-			HashMap<String,String> parameterMap=new HashMap<String,String>();
-			HashMap<String, FileItem> fileMap=new HashMap<String, FileItem>();
-			try {
-				//items = (List<FileItem>)upload.parseRequest(request);
-				items =upload.parseRequest(req);
-				Iterator<FileItem> iter = items.iterator();
-				while(iter.hasNext()){
-					FileItem item = iter.next();
-					if(item.isFormField()){
-						parameterMap.put(item.getFieldName(), item.getString());
-					}else{
-						fileMap.put(item.getFieldName(), item);
-					}
-				}
-			} catch (FileUploadException e) {
-			}
-			String action=parameterMap.get("action");
-			Class<? extends IFileUploadAction> iactionclass=fileUploadActionMap.get(action);
-			if(iactionclass!=null){
-				try{
-					IFileUploadAction iFileUploadAction=iactionclass.newInstance();
-					//BeanUtils.populate(iPageAction, req.getParameterMap());
-					et=em.getTransaction();
-					et.begin();
-					iFileUploadAction.execute(fileMap,parameterMap, resp, em,et);
-					et.commit();
-				}catch(Exception e){
-					e.printStackTrace();
-					//TODO return page with error
-					if(et!=null && et.isActive())
-						et.rollback();
-					try{
-						req.setAttribute("pageid", req.getParameter("pageid"));
-						req.setAttribute("emsg",e.getMessage());
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw);
-						e.printStackTrace(pw);
-						pw.close();sw.close();
-						
-						req.setAttribute("error",sw.toString());
-						req.getRequestDispatcher("error.jsp").forward(req, resp);
-					}catch(Exception e1){}
-				}finally{
-					IDManager.set(null);
-					if(em!=null)
-						em.close();
-				}
-			}else
-				if(em!=null)
-					em.close();
-		}
-		
+
+            String action=req.getParameter("action");
+            if(action.equals("main")){
+                    em.close();
+                    req.getRequestDispatcher("/main.jsp").forward(req, resp);
+                    return;
+            }
+
+            Class<? extends JSONAction> iactionclass=jsonActionMap.get(action);
+            if(iactionclass!=null){
+                    JSONObject obj=new JSONObject();
+                    PrintWriter writer=resp.getWriter();
+                    try {
+                            JSONAction iaction=iactionclass.newInstance();
+                            BeanUtils.populate(iaction, req.getParameterMap());
+
+                            et=em.getTransaction();
+                            et.begin();
+                            JSONObject objsr=iaction.execute(req, resp, em,et);
+                            if(et.isActive())
+                                    et.commit();
+                            resp.setHeader("Content-Type", "text/html;charset=ISO-8859-1");
+                            obj.put("success",true);
+                            if(objsr!=null)
+                                    obj.put("result",objsr);
+                    }
+                    catch (Exception e) {
+                            //e.printStackTrace();
+                            if(et!=null && et.isActive())
+                                    et.rollback();
+                            try {
+
+                                    obj.put("success",false);
+                                    obj.put("error",e.toString());
+                            } catch (JSONException e1) {
+                            }
+
+                    }finally{
+                            IDManager.set(null);
+                            if(em!=null)
+                                    em.close();
+                    }
+                    writer.write(obj.toString());
+            }else{
+                    Class<? extends IPageAction> iPageActionclass=pageActionMap.get(action);
+                    if(iPageActionclass!=null){
+                            try{
+                                    IPageAction iPageAction=iPageActionclass.newInstance();
+                                    BeanUtils.populate(iPageAction, req.getParameterMap());
+                                    et=em.getTransaction();
+                                    et.begin();
+                                    iPageAction.execute(req, resp, em,et);
+                                    et.commit();
+                            }catch(Exception e){
+                                    //e.printStackTrace();
+                                    //TODO return page with error
+                                    if(et!=null && et.isActive())
+                                            et.rollback();
+                                    try{
+                                            req.setAttribute("pageid", req.getParameter("pageid"));
+                                            req.setAttribute("emsg",e.getMessage());
+                                            StringWriter sw = new StringWriter();
+                                            PrintWriter pw = new PrintWriter(sw);
+                                            e.printStackTrace(pw);
+                                            pw.close();sw.close();
+
+                                            req.setAttribute("error",sw.toString());
+                                            req.getRequestDispatcher("error.jsp").forward(req, resp);
+                                    }catch(Exception e1){}
+                            }finally{
+                                    IDManager.set(null);
+                                    if(em!=null)
+                                            em.close();
+                            }
+                    }else
+                            if(em!=null)
+                                    em.close();
+            }
+            
 	}
 	
 
