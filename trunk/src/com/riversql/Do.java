@@ -78,243 +78,170 @@ import com.riversql.actions.UpdateSource;
 
 
 @SuppressWarnings("serial")
-public class Do extends HttpServlet {
+public class Do extends DoServlet {
 	
-	Map<String, Class<? extends JSONAction>> jsonActionMap;
-	Map<String, Class<? extends IPageAction>> pageActionMap;
-	Map<String, Class<? extends IFileUploadAction>> fileUploadActionMap;
-	 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		
-		HashMap<String, Class<? extends JSONAction>> tmp = new HashMap<String, Class<? extends JSONAction>>();
-		tmp.put("generateDDLAlterTable",GenerateDDLAlterTable.class);
-                tmp.put("generateDDLCreateTable",GenerateDDLCreateTable.class);
-		tmp.put("generateDDLCreateIndex",GenerateDDLCreateIndex.class);
-		tmp.put("getTableColumns",GetTableColumns.class);
-		tmp.put("getTableIndexesAlterTable",GetTableIndexesForAlterTable.class);
-		tmp.put("getTableColumnsAlterTable",GetTableColumnsForAlterTable.class);
-		tmp.put("getPKAlterTable",GetPKForAlterTable.class);
-		tmp.put("getTypesAlterTable",GetTypesAlterTable.class);
-		tmp.put("getMenu",GetMenu.class);
-		tmp.put("pluginAction",PluginAction.class);
-		tmp.put("getPK",GetPK.class);
-		tmp.put("getFK",GetFK.class);
-		tmp.put("getMeta",GetMeta.class);
-		tmp.put("getExportedKeys",GetExportedKeys.class);
-		tmp.put("getAdditionalData",GetAdditionalData.class);
-		tmp.put("redoQuery", RedoQuery.class);
-		tmp.put("changeCatalog",ChangeCatalog.class);
-		tmp.put("getColumnsForViewer",GetColumnsForViewer.class);
-		tmp.put("getSources",GetSources.class);
-		tmp.put("getIndexes",GetIndexes.class);
-		tmp.put("getDatabaseMetadata",GetDatabaseMetadata.class);
-		tmp.put("getConnectionStatus",GetConnectionStatus.class);
-		tmp.put("getGrants",GetGrants.class);
-		tmp.put("closeResultSet", CloseResultSet.class);
-		tmp.put("commitConnection",CommitConnection.class);
-		tmp.put("closeConnection",CloseConnection.class);
-		tmp.put("rollbackConnection", RollbackConnection.class);
-		tmp.put("getDrivers",GetDrivers.class);
-		tmp.put("getDetails",GetDetails.class);
-		tmp.put("deleteDriver",DeleteDriver.class);
-		tmp.put("updateDriver",UpdateDriver.class);
-		tmp.put("preview",Preview.class);
-		tmp.put("ping", Ping.class);
-		
-		tmp.put("updateSource",UpdateSource.class);
-		
-		tmp.put("createSource",CreateSource.class);
-		
-		
-		tmp.put("deleteSource",DeleteSource.class);
-		
-	
-		tmp.put("getTree",GetTree.class);
-		tmp.put("getDatabases",GetDatabases.class);
-		
-		tmp.put("testSourceConnection",TestSourceConnection.class);
-		tmp.put("connect",Connect.class);
-		
-		tmp.put("execute",ExecuteSQL.class);
-                tmp.put("export",Export.class);
-                tmp.put("import",Import.class);
-		jsonActionMap=Collections.unmodifiableMap(tmp);
-		
-		HashMap<String, Class<? extends IPageAction>> tmp2 = new HashMap<String, Class<? extends IPageAction>>();
-		
-		
-		//tmp2.put("selectTable",SelectTable.class);
-		
-		tmp2.put("about",AboutPage.class);
-		tmp2.put("config",ConfigPage.class);
-		
-		tmp2.put("sourcesPage",SourcesPage.class);
-		tmp2.put("exportTablePage", ExportTablePage.class);
-		tmp2.put("doExport",DoExport.class);
+    Map<String, Class<? extends JSONAction>> jsonActionMap;
+    Map<String, Class<? extends IPageAction>> pageActionMap;
+    //Map<String, Class<? extends IFileUploadAction>> fileUploadActionMap;
 
-                tmp2.put("excelExport",ExcelExport.class );
-		tmp2.put("pdfExport", PdfExport.class);
-                tmp2.put("csvExport", CsvExport.class);
-                
-		pageActionMap=Collections.unmodifiableMap(tmp2);
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
 
-                /*
-		HashMap<String, Class<? extends IFileUploadAction>> tmp3 = new HashMap<String, Class<? extends IFileUploadAction>>();
-		tmp3.put("excelExport",ExcelExport.class );
-		tmp3.put("pdfExport", PdfExport.class);
-                tmp3.put("csvExport", CsvExport.class);
-		fileUploadActionMap=Collections.unmodifiableMap(tmp3);
+        HashMap<String, Class<? extends JSONAction>> tmp = new HashMap<String, Class<? extends JSONAction>>();
+        tmp.put("generateDDLAlterTable",GenerateDDLAlterTable.class);
+        tmp.put("generateDDLCreateTable",GenerateDDLCreateTable.class);
+        tmp.put("generateDDLCreateIndex",GenerateDDLCreateIndex.class);
+        tmp.put("getTableColumns",GetTableColumns.class);
+        tmp.put("getTableIndexesAlterTable",GetTableIndexesForAlterTable.class);
+        tmp.put("getTableColumnsAlterTable",GetTableColumnsForAlterTable.class);
+        tmp.put("getPKAlterTable",GetPKForAlterTable.class);
+        tmp.put("getTypesAlterTable",GetTypesAlterTable.class);
+        tmp.put("getMenu",GetMenu.class);
+        tmp.put("pluginAction",PluginAction.class);
+        tmp.put("getPK",GetPK.class);
+        tmp.put("getFK",GetFK.class);
+        tmp.put("getMeta",GetMeta.class);
+        tmp.put("getExportedKeys",GetExportedKeys.class);
+        tmp.put("getAdditionalData",GetAdditionalData.class);
+        tmp.put("redoQuery", RedoQuery.class);
+        tmp.put("changeCatalog",ChangeCatalog.class);
+        tmp.put("getColumnsForViewer",GetColumnsForViewer.class);
+        tmp.put("getSources",GetSources.class);
+        tmp.put("getIndexes",GetIndexes.class);
+        tmp.put("getDatabaseMetadata",GetDatabaseMetadata.class);
+        tmp.put("getConnectionStatus",GetConnectionStatus.class);
+        tmp.put("getGrants",GetGrants.class);
+        tmp.put("closeResultSet", CloseResultSet.class);
+        tmp.put("commitConnection",CommitConnection.class);
+        tmp.put("closeConnection",CloseConnection.class);
+        tmp.put("rollbackConnection", RollbackConnection.class);
+        tmp.put("getDrivers",GetDrivers.class);
+        tmp.put("getDetails",GetDetails.class);
+        tmp.put("deleteDriver",DeleteDriver.class);
+        tmp.put("updateDriver",UpdateDriver.class);
+        tmp.put("preview",Preview.class);
+        tmp.put("ping", Ping.class);
 
-                */
-	}
-	
-	 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		HttpSession session=req.getSession(true);
-		
-		synchronized (session) {
-			WebSQLSession sessions=(WebSQLSession)session.getAttribute("sessions");
-			if(sessions!=null){
-				IDManager idmanager=sessions.getIDManager();
-				IDManager.set(idmanager);
-			}else{
-				WebSQLSession newsessions=new WebSQLSession();
-				IDManager.set(newsessions.getIDManager());
-				session.setAttribute("sessions", newsessions);
-				sessions=newsessions;
-			}
-		}
-		
-		
-		EntityManagerFactory emf=(EntityManagerFactory)session.getServletContext().getAttribute("emf");
-		EntityManager em=emf.createEntityManager();
-		
-		EntityTransaction et=null;
-		
-		
-		String usernamesession=(String)session.getAttribute("loggeduser");
-		String username=null;
-	    // Do we allow that user?
-	    if(usernamesession==null){
-	    	String auth = req.getHeader("Authorization");
-	    	username=allowUser(em,auth);
-	    }
-	    if (usernamesession==null && username==null) {
-	    	em.close();
-	    	resp.setContentType("text/plain");
-	    	resp.setHeader("WWW-Authenticate", "BASIC realm=\"dwLoader users\"");
-	    	resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-	    	return;
-	    }else if(usernamesession==null){
-	    	usernamesession=username;
-	    	session.setAttribute("loggeduser", username);
-	    	int dot=usernamesession.indexOf(".");
-		    if(dot>-1){
-		    	String shortName=username.substring(0,dot);
-		    	shortName=shortName.substring(0, 1).toUpperCase() + shortName.substring(1).toLowerCase();
-		    	session.setAttribute("shortName", shortName);
-		    }else{
-		    	String capitalized=username.substring(0, 1).toUpperCase() + username.substring(1).toLowerCase();
-		    	session.setAttribute("shortName", capitalized);
-		    }
-	    }
+        tmp.put("updateSource",UpdateSource.class);
 
-            String action=req.getParameter("action");
-            if(action.equals("main")){
-                    em.close();
-                    req.getRequestDispatcher("/main.jsp").forward(req, resp);
-                    return;
-            }
+        tmp.put("createSource",CreateSource.class);
 
-            Class<? extends JSONAction> iactionclass=jsonActionMap.get(action);
-            if(iactionclass!=null){
-                    JSONObject obj=new JSONObject();
-                    PrintWriter writer=resp.getWriter();
-                    try {
-                            JSONAction iaction=iactionclass.newInstance();
-                            BeanUtils.populate(iaction, req.getParameterMap());
 
-                            et=em.getTransaction();
-                            et.begin();
-                            JSONObject objsr=iaction.execute(req, resp, em,et);
-                            if(et.isActive())
-                                    et.commit();
-                            resp.setHeader("Content-Type", "text/html;charset=ISO-8859-1");
-                            obj.put("success",true);
-                            if(objsr!=null)
-                                    obj.put("result",objsr);
-                    }
-                    catch (Exception e) {
-                            //e.printStackTrace();
-                            if(et!=null && et.isActive())
-                                    et.rollback();
-                            try {
+        tmp.put("deleteSource",DeleteSource.class);
 
-                                    obj.put("success",false);
-                                    obj.put("error",e.toString());
-                            } catch (JSONException e1) {
-                            }
 
-                    }finally{
-                            IDManager.set(null);
-                            if(em!=null)
-                                    em.close();
-                    }
-                    writer.write(obj.toString());
-            }else{
-                    Class<? extends IPageAction> iPageActionclass=pageActionMap.get(action);
-                    if(iPageActionclass!=null){
-                            try{
-                                    IPageAction iPageAction=iPageActionclass.newInstance();
-                                    BeanUtils.populate(iPageAction, req.getParameterMap());
-                                    et=em.getTransaction();
-                                    et.begin();
-                                    iPageAction.execute(req, resp, em,et);
-                                    et.commit();
-                            }catch(Exception e){
-                                    //e.printStackTrace();
-                                    //TODO return page with error
-                                    if(et!=null && et.isActive())
-                                            et.rollback();
-                                    try{
-                                            req.setAttribute("pageid", req.getParameter("pageid"));
-                                            req.setAttribute("emsg",e.getMessage());
-                                            StringWriter sw = new StringWriter();
-                                            PrintWriter pw = new PrintWriter(sw);
-                                            e.printStackTrace(pw);
-                                            pw.close();sw.close();
+        tmp.put("getTree",GetTree.class);
+        tmp.put("getDatabases",GetDatabases.class);
 
-                                            req.setAttribute("error",sw.toString());
-                                            req.getRequestDispatcher("error.jsp").forward(req, resp);
-                                    }catch(Exception e1){}
-                            }finally{
-                                    IDManager.set(null);
-                                    if(em!=null)
-                                            em.close();
-                            }
-                    }else
-                            if(em!=null)
-                                    em.close();
-            }
-            
-	}
-	
+        tmp.put("testSourceConnection",TestSourceConnection.class);
+        tmp.put("connect",Connect.class);
 
-	 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		doGet(req, resp);
-	}
-	
-	protected String allowUser(EntityManager em, String auth)  {
+        tmp.put("execute",ExecuteSQL.class);
+        tmp.put("export",Export.class);
+        tmp.put("import",Import.class);
+        jsonActionMap=Collections.unmodifiableMap(tmp);
 
-		return "User";
-	   
-	  }
+        HashMap<String, Class<? extends IPageAction>> tmp2 = new HashMap<String, Class<? extends IPageAction>>();
+
+
+        //tmp2.put("selectTable",SelectTable.class);
+
+        tmp2.put("about",AboutPage.class);
+        tmp2.put("config",ConfigPage.class);
+
+        tmp2.put("sourcesPage",SourcesPage.class);
+        tmp2.put("exportTablePage", ExportTablePage.class);
+        tmp2.put("doExport",DoExport.class);
+
+        tmp2.put("excelExport",ExcelExport.class );
+        tmp2.put("pdfExport", PdfExport.class);
+        tmp2.put("csvExport", CsvExport.class);
+
+        pageActionMap=Collections.unmodifiableMap(tmp2);
+
+        /*
+        HashMap<String, Class<? extends IFileUploadAction>> tmp3 = new HashMap<String, Class<? extends IFileUploadAction>>();
+        tmp3.put("excelExport",ExcelExport.class );
+        tmp3.put("pdfExport", PdfExport.class);
+        tmp3.put("csvExport", CsvExport.class);
+        fileUploadActionMap=Collections.unmodifiableMap(tmp3);
+
+        */
+    }
+
+    @Override
+    public void execute(HttpServletRequest req, HttpServletResponse resp, EntityManager em, EntityTransaction et) throws Exception {
+        String action=req.getParameter("action");
+        Class<? extends JSONAction> iactionclass=jsonActionMap.get(action);
+        if(iactionclass!=null){
+                JSONObject obj=new JSONObject();
+                PrintWriter writer=resp.getWriter();
+                try {
+                        JSONAction iaction=iactionclass.newInstance();
+                        BeanUtils.populate(iaction, req.getParameterMap());
+
+                        et=em.getTransaction();
+                        et.begin();
+                        JSONObject objsr=iaction.execute(req, resp, em,et);
+                        if(et.isActive())
+                                et.commit();
+                        resp.setHeader("Content-Type", "text/html;charset=ISO-8859-1");
+                        obj.put("success",true);
+                        if(objsr!=null)
+                                obj.put("result",objsr);
+                }
+                catch (Exception e) {
+                        //e.printStackTrace();
+                        if(et!=null && et.isActive())
+                                et.rollback();
+                        try {
+
+                                obj.put("success",false);
+                                obj.put("error",e.toString());
+                        } catch (JSONException e1) {
+                        }
+
+                }finally{
+                        IDManager.set(null);
+                        if(em!=null)
+                                em.close();
+                }
+                writer.write(obj.toString());
+        }else{
+                Class<? extends IPageAction> iPageActionclass=pageActionMap.get(action);
+                if(iPageActionclass!=null){
+                        try{
+                                IPageAction iPageAction=iPageActionclass.newInstance();
+                                BeanUtils.populate(iPageAction, req.getParameterMap());
+                                et=em.getTransaction();
+                                et.begin();
+                                iPageAction.execute(req, resp, em,et);
+                                et.commit();
+                        }catch(Exception e){
+                                //e.printStackTrace();
+                                //TODO return page with error
+                                if(et!=null && et.isActive())
+                                        et.rollback();
+                                try{
+                                        req.setAttribute("pageid", req.getParameter("pageid"));
+                                        req.setAttribute("emsg",e.getMessage());
+                                        StringWriter sw = new StringWriter();
+                                        PrintWriter pw = new PrintWriter(sw);
+                                        e.printStackTrace(pw);
+                                        pw.close();sw.close();
+
+                                        req.setAttribute("error",sw.toString());
+                                        req.getRequestDispatcher("error.jsp").forward(req, resp);
+                                }catch(Exception e1){}
+                        }finally{
+                                IDManager.set(null);
+                                if(em!=null)
+                                        em.close();
+                        }
+                }else
+                        if(em!=null)
+                                em.close();
+        }
+    }
 }

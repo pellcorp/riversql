@@ -86,6 +86,21 @@ public abstract class DBNode implements IStructureNode {
 		}
 		return children;
 	}
+
+        public IStructureNode getChildrenByName(String nodeName) throws SQLException
+        {
+            load();
+            IStructureNode childNode = null;
+            for(int i=0;i<children.size();i++){
+                childNode = children.get(i);
+                if(childNode.getName().equalsIgnoreCase(nodeName))
+                {
+                    return childNode;
+                }
+            }
+            return childNode;
+        }
+
 //	public  JSONObject toJSON() throws JSONException{
 //		JSONObject obj=new JSONObject();
 //		obj.put("text", getName());

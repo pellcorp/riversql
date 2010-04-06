@@ -2351,7 +2351,6 @@ function createCustomizeImport(){
         var fileUploadPanel1 = new Ext.FormPanel({
             fileUpload: true,
             width: 500,
-            frame: true,
             title: 'Import Step 1',
             bodyStyle: 'padding: 10px 10px 0 10px;',
             labelWidth: 150,
@@ -2433,25 +2432,96 @@ function createCustomizeImport(){
             }]
         });
 
+        var connectionCombo = new Ext.form.ComboBox( {
+		store :databasesDataStore,
+                fieldLabel: 'Connection',
+		displayField :'name',
+		valueField :'id',
+		mode :'local',
+		triggerAction :'all',
+		selectOnFocus :true,
+		width :200,
+		forceSelection :true
+	});
+        
+        connectionCombo.on('select', function() {
+            var selectedConnection = databasesDataStore.getById(connectionCombo.getValue());
+            
+            databaseStore.loadData(selectedConnection.get('catalogs'));
+        });
+
+        var databaseStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: ['databasename']
+        });
+
+        var databaseCombo = new Ext.form.ComboBox( {
+		store :databaseStore,
+                fieldLabel: 'Database',
+		displayField :'databasename',
+		valueField :'databasename',
+		mode :'local',
+		triggerAction :'all',
+		selectOnFocus :true,
+		width :200,
+		forceSelection :true
+	});
+
+	var tableStore = new Ext.data.SimpleStore( {
+		fields : [ 'text' ],
+		data : [ [] ]
+	});
+	var tableCombo = new Ext.form.ComboBox( {
+		store :tableStore,
+                fieldLabel: 'Table',
+		displayField :'text',
+		valueField :'text',
+		mode :'local',
+		triggerAction :'all',
+		selectOnFocus :true,
+		width :200,
+		forceSelection :true
+	});
+
+        var columnSelectorDef = Ext.data.Record.create( [ {
+            name :'columnname',
+            type :'string'
+        } ]);
+
+        var columnStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: columnSelectorDef,
+            sortInfo: {
+                field: 'columnname',
+                direction: 'ASC'
+            }
+        });
+
+        var columnSelector = new Ext.ux.ItemSelector( {
+            name :"columnSelector",
+            id : "columnSelector",
+            fieldLabel : "Columns",
+            dataFields : ['columnname'],
+            toData : [[]],
+            msWidth :150,
+            msHeight :350,
+            valueField :"columnname",
+            displayField :"columnname",
+            imagePath: 'icons/images/',
+            toLegend :"Selected",
+            fromLegend :"Available",
+            fromStore :columnStore
+    });
         
 
         var fileUploadPanel2 = new Ext.FormPanel({
             fileUpload: true,
             width: 500,
-            frame: true,
             hidden: true,
             title: 'Import Step 2',
             bodyStyle: 'padding: 10px 10px 0 10px;',
             labelWidth: 150,
-            items: [{
-                    fieldLabel: 'First Name',
-                    name: 'first',
-                    allowBlank:false
-                },{
-                    fieldLabel: 'Last Name',
-                    name: 'last'
-                }
-            ],
+            items: [connectionCombo,databaseCombo,tableCombo,columnSelector],
             buttons: [{
                 text: 'Finish',
                 handler: function(){
