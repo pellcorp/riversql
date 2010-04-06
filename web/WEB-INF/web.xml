@@ -81,18 +81,34 @@
     <url-pattern>*.js</url-pattern>
   </filter-mapping> 
 
-  
+
     <servlet>
-		<servlet-name>do</servlet-name>
-		<servlet-class>com.riversql.Do</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+        <servlet-name>do</servlet-name>
+	<servlet-class>com.riversql.Do</servlet-class>
+	<load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>request</servlet-name>
+	<servlet-class>com.riversql.Request</servlet-class>
+	<load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>page</servlet-name>
+	<servlet-class>com.riversql.Page</servlet-class>
+	<load-on-startup>2</load-on-startup>
+    </servlet>
 	
-	
-	<servlet-mapping>
+    <servlet-mapping>
     	<servlet-name>do</servlet-name>
     	<url-pattern>/do/*</url-pattern>
-	</servlet-mapping>
-	
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>request</servlet-name>
+    	<url-pattern>/request/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>page</servlet-name>
+    	<url-pattern>/page/*</url-pattern>
+    </servlet-mapping>
 	
 </web-app>

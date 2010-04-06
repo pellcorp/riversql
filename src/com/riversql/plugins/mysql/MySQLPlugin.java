@@ -286,9 +286,7 @@ public class MySQLPlugin implements Plugin {
 			HttpServletResponse response, EntityManager em, EntityTransaction et)
 			throws Exception {
 		String className=request.getParameter("class");
-                String method=request.getParameter("method");
-		String id=request.getParameter("id");
-
+                
                 if(className!=null && className.length()>0)
                 {
                     Class getJSONObject = Class.forName("com.riversql.plugins.mysql.actions."+className);
@@ -296,6 +294,9 @@ public class MySQLPlugin implements Plugin {
                     getJSONObjectInterface.init(request, response, em, et);
                     return getJSONObjectInterface.execute();
                 }
+                
+                String method=request.getParameter("method");
+		String id=request.getParameter("id");
 
 		if("showStatus".equals(method)){
 			DatabaseNode dn=(DatabaseNode)IDManager.get().get(id);
