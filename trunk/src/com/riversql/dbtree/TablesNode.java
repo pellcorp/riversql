@@ -57,16 +57,20 @@ public class TablesNode extends DBNode implements IStructureNode{
 		
 		if(tableType.toUpperCase().indexOf("VIEW")>-1){
 			return "views";
-		}else{
+		}else if(tableType.toUpperCase().indexOf("TABLE")>-1){
 			return "tables";
+		}else{
+			return "temporary";
 		}
 	}
 
 	public String getType() {
 		if(tableType.toUpperCase().indexOf("VIEW")>-1){
 			return "views";
-		}else{
+		}else if(tableType.toUpperCase().indexOf("TABLE")>-1){
 			return "tbs";
+		}else{
+			return "temptable";
 		}
 	}
 
