@@ -2446,8 +2446,14 @@ function createCustomizeImport(){
         
         connectionCombo.on('select', function() {
             var selectedConnection = databasesDataStore.getById(connectionCombo.getValue());
-            
-            databaseStore.loadData(selectedConnection.get('catalogs'));
+            var catalogs = selectedConnection.get('catalogs');
+            var rta = [];
+            for (i = 0; i < catalogs.length; i++) {
+                    var rta2 = [];
+                    rta2.push(catalogs[i]);
+                    rta.push(rta2);
+            }
+            databaseStore.loadData(rta,true);
         });
 
         var databaseStore = new Ext.data.ArrayStore({
@@ -2467,20 +2473,46 @@ function createCustomizeImport(){
 		forceSelection :true
 	});
 
-	var tableStore = new Ext.data.SimpleStore( {
-		fields : [ 'text' ],
-		data : [ [] ]
-	});
-	var tableCombo = new Ext.form.ComboBox( {
-		store :tableStore,
-                fieldLabel: 'Table',
-		displayField :'text',
-		valueField :'text',
-		mode :'local',
-		triggerAction :'all',
-		selectOnFocus :true,
-		width :200,
-		forceSelection :true
+        databaseCombo.on('select', function() {
+            alert(databaseCombo.getValue());
+            var tableComboReader = new Ext.data.JsonReader({
+                root: 'result.tables'
+                },['tablename']);
+
+            var tableComboProxy = new Ext.data.HttpProxy({
+                   url: 'request?class=DatabaseInfo&method=getTables&id='+connectionCombo.getValue()+'&catalogName='+databaseCombo.getValue(),
+                   method : "POST"
+                });
+
+            var tableComboDataStore = new Ext.data.Store({
+                proxy: tableComboProxy,
+                reader: tableComboReader
+            });
+
+            tableComboDataStore.on('load', loadTablesSuccessful);
+            function loadTablesSuccessful(store, recordArray, options) {
+                tableStore.loadData(tableComboDataStore);
+            }
+
+            tableComboDataStore.load();
+            
+        });
+
+        var tableStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: ['tablename']
+        });
+        
+	var tableCombo = new Ext.form.ComboBox({
+            store :tableStore,
+            fieldLabel: 'Table',
+            displayField :'tablename',
+            valueField :'tablename',
+            mode :'local',
+            triggerAction :'all',
+            selectOnFocus :true,
+            width :200,
+            forceSelection :true
 	});
 
         var columnSelectorDef = Ext.data.Record.create( [ {

@@ -72,7 +72,7 @@ public abstract class DoServlet extends HttpServlet {
         }
 
         String action=req.getParameter("action");
-        if(action.equals("main")){
+        if(action!=null && action.equals("main")){
                 em.close();
                 req.getRequestDispatcher("/main.jsp").forward(req, resp);
                 return;

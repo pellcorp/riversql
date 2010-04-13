@@ -30,7 +30,7 @@ public class TablesNode extends DBNode implements IStructureNode{
 	 
 	@Override
 	public void nodeLoad()throws SQLException{
-
+                children.clear();
 		ITableInfo[] tables = conn.getSQLMetaData().getTables(catName,
 			schemaName, "%", new String[]{tableType},null); 
 

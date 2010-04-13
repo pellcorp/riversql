@@ -22,11 +22,12 @@ public class CatalogOfSchemasNode extends DBNode implements IStructureNode {
 	 
 	@Override
 	protected void nodeLoad() {
-		if(schemas!=null)
-			for(int i=0;i<schemas.length;i++){
-				SchemaNode sn=new SchemaNode(schemas[i],conn,text);
-				children.add(sn);
-			}
+                children.clear();
+                if(schemas!=null)
+                    for(int i=0;i<schemas.length;i++){
+                            SchemaNode sn=new SchemaNode(schemas[i],conn,text);
+                            children.add(sn);
+                    }
 	}
 
 	public String getName() {

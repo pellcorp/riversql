@@ -15,6 +15,9 @@ public class TestClass {
 
     public static void main(String args[]){
 
+        
+
+        /*
         String userId = "RiverLiao";
         TestClass test = new TestClass();
         String res = test.getSerial(userId, "20");
@@ -25,6 +28,8 @@ public class TestClass {
         //ELR8ZC-855575-68595257653451829
 
         System.out.println(getSerialNum("qw12qwerqwerq"));
+         *
+         */
         
         /*
         String userHost = "'river'@'host'";

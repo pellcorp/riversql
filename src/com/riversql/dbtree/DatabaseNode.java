@@ -68,7 +68,7 @@ public class DatabaseNode extends DBNode implements IStructureNode{
 	 
 	@Override
 	protected void nodeLoad()throws SQLException{
-		
+		children.clear();
 		SQLDatabaseMetaData metadata = conn.getSQLMetaData();
 		
 		if (supportsCatalogs && supportsSchemas) { 
