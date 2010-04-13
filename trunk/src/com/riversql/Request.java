@@ -2,6 +2,7 @@
 package com.riversql;
 
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -20,40 +21,16 @@ public class Request extends DoServlet {
     public void execute(HttpServletRequest req, HttpServletResponse resp, EntityManager em, EntityTransaction et) throws Exception {
         String className=req.getParameter("class");
         Class jasonActionClass = Class.forName("com.riversql.actions."+className);
-        JSONAction jsonAction = (JSONAction)jasonActionClass.newInstance();
+        JSONDispatchAction jsonDispatchAction = (JSONDispatchAction)jasonActionClass.newInstance();
 
-
-            
         JSONObject obj=new JSONObject();
         PrintWriter writer=resp.getWriter();
         try {
-                BeanUtils.populate(jsonAction, req.getParameterMap());
                 JSONObject objsr = null;
 
                 et=em.getTransaction();
                 et.begin();
-                String methodName=req.getParameter("method");
-                if(methodName == null)
-                {
-                    objsr=jsonAction.execute(req, resp, em,et);
-                }
-                else
-                {
-                    Class[] parameterTypeClass = new Class[4];
-                    parameterTypeClass[0] = HttpServletRequest.class;
-                    parameterTypeClass[1] = HttpServletResponse.class;
-                    parameterTypeClass[2] = EntityManager.class;
-                    parameterTypeClass[3] = EntityTransaction.class;
-
-                    Object[] parameterClass = new Object[4];
-                    parameterClass[0] = req;
-                    parameterClass[1] = resp;
-                    parameterClass[2] = em;
-                    parameterClass[3] = et;
-
-                    Method method = jasonActionClass.getMethod(methodName,parameterTypeClass);
-                    objsr = (JSONObject)method.invoke(jsonAction,parameterClass);
-                }
+                objsr=jsonDispatchAction.dispatch(req, resp, em,et);
                 
                 if(et.isActive())
                         et.commit();
@@ -63,15 +40,29 @@ public class Request extends DoServlet {
                         obj.put("result",objsr);
         }
         catch (Exception e) {
-                //e.printStackTrace();
-                if(et!=null && et.isActive())
-                        et.rollback();
-                try {
-
-                        obj.put("success",false);
-                        obj.put("error",e.toString());
-                } catch (JSONException e1) {
+            String errorMsg = "";
+            if (e instanceof InvocationTargetException)
+            {
+                Throwable targetEx = ((InvocationTargetException)e).getTargetException();
+                if (targetEx != null)
+                {
+                     errorMsg = targetEx.toString();
                 }
+            }
+            else
+            {
+                errorMsg = e.toString();
+            }
+
+
+            if(et!=null && et.isActive())
+                    et.rollback();
+            try {
+
+                    obj.put("success",false);
+                    obj.put("error",errorMsg);
+            } catch (JSONException e1) {
+            }
 
         }finally{
                 IDManager.set(null);

@@ -25,7 +25,7 @@ public class SchemaNode extends DBNode implements IStructureNode{
 	 
 	@Override
 	protected void nodeLoad() throws SQLException{
-		
+		children.clear();
 		String[] tbTypes = conn.getSQLMetaData().getTableTypes();
 		for (int i = 0; i < tbTypes.length; ++i) {
 			String tableType = tbTypes[i];
