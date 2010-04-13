@@ -31,6 +31,18 @@ public class CatalogNode extends DBNode implements IStructureNode{
 		String[] tbTypes = conn.getSQLMetaData().getTableTypes();
 		for (int i = 0; i < tbTypes.length; ++i) {
 			String tableType = tbTypes[i];
+                        if(tableType.equalsIgnoreCase("TABLE"))
+                        {
+                            tableType = "Table";
+                        }
+                        else if(tableType.equalsIgnoreCase("VIEW"))
+                        {
+                            tableType = "View";
+                        }
+                        else if(tableType.equalsIgnoreCase("LOCAL TEMPORARY"))
+                        {
+                            tableType = "Temporary";
+                        }
 			children.add(new TablesNode(this, tableType, conn));
 		}
 		PluginManager pm=PluginManager.getInstance();
