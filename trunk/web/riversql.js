@@ -2313,14 +2313,240 @@ function createDataSourcesPage(){
 
 function createCustomizeExport(){
 	var tabFolder = Ext.getCmp('tabpanelpages');
+        var filename = '';
+        var csvseparator = '';
+        var fileencoding = '';
 
-	var page = new Ext.Panel({
-		autoScroll :true,
-		closable:true,
-		title :"<img src='icons/cd_edit.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Export Table"
+        var importpage = new Ext.Panel({
+            autoScroll :true,
+            closable:true,
+            title :"<img src='cd_edit.png' style='vertical-align:bottom;height:16px;width:16px' />&nbsp;Export"
 	});
-	tabFolder.add(page);
-	tabFolder.setActiveTab(page);
+
+        var connectionCombo = new Ext.form.ComboBox( {
+		store :databasesDataStore,
+                fieldLabel: 'Connection',
+		displayField :'name',
+		valueField :'id',
+		mode :'local',
+		triggerAction :'all',
+		selectOnFocus :true,
+		width :200,
+		forceSelection :true
+	});
+
+        connectionCombo.on('select', function() {
+            var selectedConnection = databasesDataStore.getById(connectionCombo.getValue());
+            var catalogs = selectedConnection.get('catalogs');
+            var rta = [];
+            for (i = 0; i < catalogs.length; i++) {
+                    var rta2 = [];
+                    rta2.push(catalogs[i]);
+                    rta.push(rta2);
+            }
+            databaseStore.loadData(rta,false);
+        });
+
+        var databaseStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: ['databasename']
+        });
+
+        var databaseCombo = new Ext.form.ComboBox( {
+		store :databaseStore,
+                fieldLabel: 'Database',
+		displayField :'databasename',
+		valueField :'databasename',
+		mode :'local',
+		triggerAction :'all',
+		selectOnFocus :true,
+		width :200,
+		forceSelection :true
+	});
+
+        databaseCombo.on('select', function() {
+            var tableComboReader = new Ext.data.JsonReader({
+                root: 'result.tables'
+                },['tablename']);
+
+            var tableComboProxy = new Ext.data.HttpProxy({
+                   url: 'request?class=DatabaseInfo&method=getTables&id='+connectionCombo.getValue()+'&catalogName='+databaseCombo.getValue(),
+                   method : "POST"
+                });
+
+            var tableComboDataStore = new Ext.data.Store({
+                proxy: tableComboProxy,
+                reader: tableComboReader
+            });
+
+            tableComboDataStore.on('load', loadTablesSuccessful);
+            function loadTablesSuccessful() {
+                var rta = [];
+                for (i = 0; i < tableComboDataStore.getCount(); i++) {
+                        var rta2 = [];
+                        rta2.push(tableComboDataStore.getAt(i).get('tablename'));
+                        rta.push(rta2);
+                }
+                tableStore.loadData(rta,false);
+            }
+
+            tableComboDataStore.load();
+
+        });
+
+        var tableStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: ['tablename']
+        });
+
+	var tableCombo = new Ext.form.ComboBox({
+            store :tableStore,
+            fieldLabel: 'Table',
+            displayField :'tablename',
+            valueField :'tablename',
+            mode :'local',
+            triggerAction :'all',
+            selectOnFocus :true,
+            width :200,
+            forceSelection :true
+	});
+
+        tableCombo.on('select', function() {
+            var columnSelectorReader = new Ext.data.JsonReader({
+                root: 'result.columns'
+                },['cname']);
+
+            var columnSelectorProxy = new Ext.data.HttpProxy({
+                   url: 'request?class=DatabaseInfo&method=getColumns&id='+connectionCombo.getValue()+'&catalogName='+databaseCombo.getValue()+'&tableName='+tableCombo.getValue(),
+                   method : "POST"
+                });
+
+            var columnSelectorDataStore = new Ext.data.Store({
+                proxy: columnSelectorProxy,
+                reader: columnSelectorReader
+            });
+
+            columnSelectorDataStore.on('load', loadColumnsSuccessful);
+            function loadColumnsSuccessful() {
+                var rta = [];
+                for (i = 0; i < columnSelectorDataStore.getCount(); i++) {
+                        var rta2 = [];
+                        rta2.push(columnSelectorDataStore.getAt(i).get('cname'));
+                        rta.push(rta2);
+                }
+                Ext.getCmp("columnSelector").fromStore.loadData(rta,false);
+                Ext.getCmp("columnSelector").toStore.removeAll();
+            }
+
+            columnSelectorDataStore.load();
+
+        });
+
+
+        var columnSelectorDef = Ext.data.Record.create( [ {
+            name :'cname',
+            type :'string'
+        } ]);
+
+        var columnStore = new Ext.data.ArrayStore({
+            data: [[]],
+            fields: columnSelectorDef,
+            sortInfo: {
+                field: 'cname',
+                direction: 'ASC'
+            }
+        });
+
+        var columnSelector = new Ext.ux.ItemSelector( {
+            name :"columnSelector",
+            id : "columnSelector",
+            fieldLabel : "Columns",
+            dataFields : ['cname'],
+            toData : [[]],
+            msWidth :150,
+            msHeight :350,
+            valueField :"cname",
+            displayField :"cname",
+            imagePath: 'icons/images/',
+            toLegend :"Selected",
+            fromLegend :"Available",
+            fromStore :columnStore
+    });
+
+
+        var exportFormPanel = new Ext.FormPanel({
+            fileUpload: true,
+            width: 500,
+            title: 'Export Tables',
+            bodyStyle: 'padding: 10px 10px 0 10px;',
+            labelWidth: 150,
+            items: [{
+                    xtype:          'combo',
+                    name:           'separator',
+                    id:           'separator',
+                    fieldLabel:     'Column Separator',
+                    value:          'comma',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    mode: 'local',
+                    forceSelection: true,
+                    displayField:   'name',
+                    valueField:     'value',
+                    store:          new Ext.data.ArrayStore({
+                        fields : ['value', 'name'],
+                        data   : [
+                            ['comma',   'Comma'],
+                            ['tab',  'Tab'],
+                            ['verticalbar', 'Vertical Bar']
+                        ]
+                    })
+
+                },
+                {
+                    xtype:          'combo',
+                    name:           'fileencoding',
+                    id:           'fileencoding',
+                    fieldLabel:     'File Encoding',
+                    value:          'ascii',
+                    triggerAction: 'all',
+                    mode: 'local',
+                    forceSelection: true,
+                    displayField:   'name',
+                    valueField:     'value',
+                    store:          new Ext.data.ArrayStore({
+                        fields : ['value', 'name'],
+                        data   : [
+                            ['ascii',   'ASCII'],
+                            ['utf8',  'UTF-8'],
+                            ['unicode', 'Unicode']
+                        ]
+                    })
+
+                },connectionCombo,databaseCombo,tableCombo,columnSelector],
+            buttons: [{
+                text: 'Export',
+                handler: function(){
+                    if(exportFormPanel.getForm().isValid()){
+                            exportFormPanel.getForm().submit({
+                                url: 'do?action=export',
+                                waitMsg: 'Exporting...',
+                                success: function(result, request){
+                                    alert("Success"+csvseparator+fileencoding);
+                                }
+                            });
+                    }
+                }
+            },{
+                text: 'Reset',
+                handler: function(){
+                    exportFormPanel.getForm().reset();
+                }
+            }]
+        });
+
+        importpage.add(exportFormPanel);
+	tabFolder.add(importpage);
+	tabFolder.setActiveTab(importpage);
 }
 
 function createCustomizeImport(){
@@ -2453,7 +2679,7 @@ function createCustomizeImport(){
                     rta2.push(catalogs[i]);
                     rta.push(rta2);
             }
-            databaseStore.loadData(rta,true);
+            databaseStore.loadData(rta,false);
         });
 
         var databaseStore = new Ext.data.ArrayStore({
@@ -2474,7 +2700,6 @@ function createCustomizeImport(){
 	});
 
         databaseCombo.on('select', function() {
-            alert(databaseCombo.getValue());
             var tableComboReader = new Ext.data.JsonReader({
                 root: 'result.tables'
                 },['tablename']);
@@ -2490,8 +2715,14 @@ function createCustomizeImport(){
             });
 
             tableComboDataStore.on('load', loadTablesSuccessful);
-            function loadTablesSuccessful(store, recordArray, options) {
-                tableStore.loadData(tableComboDataStore);
+            function loadTablesSuccessful() {
+                var rta = [];
+                for (i = 0; i < tableComboDataStore.getCount(); i++) {
+                        var rta2 = [];
+                        rta2.push(tableComboDataStore.getAt(i).get('tablename'));
+                        rta.push(rta2);
+                }
+                tableStore.loadData(rta,false);
             }
 
             tableComboDataStore.load();
@@ -2515,8 +2746,40 @@ function createCustomizeImport(){
             forceSelection :true
 	});
 
+        tableCombo.on('select', function() {
+            var columnSelectorReader = new Ext.data.JsonReader({
+                root: 'result.columns'
+                },['cname']);
+
+            var columnSelectorProxy = new Ext.data.HttpProxy({
+                   url: 'request?class=DatabaseInfo&method=getColumns&id='+connectionCombo.getValue()+'&catalogName='+databaseCombo.getValue()+'&tableName='+tableCombo.getValue(),
+                   method : "POST"
+                });
+
+            var columnSelectorDataStore = new Ext.data.Store({
+                proxy: columnSelectorProxy,
+                reader: columnSelectorReader
+            });
+            
+            columnSelectorDataStore.on('load', loadColumnsSuccessful);
+            function loadColumnsSuccessful() {
+                var rta = [];
+                for (i = 0; i < columnSelectorDataStore.getCount(); i++) {
+                        var rta2 = [];
+                        rta2.push(columnSelectorDataStore.getAt(i).get('cname'));
+                        rta.push(rta2);
+                }
+                Ext.getCmp("columnSelector").fromStore.loadData(rta,false);
+                Ext.getCmp("columnSelector").toStore.removeAll();
+            }
+
+            columnSelectorDataStore.load();
+
+        });
+
+
         var columnSelectorDef = Ext.data.Record.create( [ {
-            name :'columnname',
+            name :'cname',
             type :'string'
         } ]);
 
@@ -2524,7 +2787,7 @@ function createCustomizeImport(){
             data: [[]],
             fields: columnSelectorDef,
             sortInfo: {
-                field: 'columnname',
+                field: 'cname',
                 direction: 'ASC'
             }
         });
@@ -2533,12 +2796,12 @@ function createCustomizeImport(){
             name :"columnSelector",
             id : "columnSelector",
             fieldLabel : "Columns",
-            dataFields : ['columnname'],
+            dataFields : ['cname'],
             toData : [[]],
             msWidth :150,
             msHeight :350,
-            valueField :"columnname",
-            displayField :"columnname",
+            valueField :"cname",
+            displayField :"cname",
             imagePath: 'icons/images/',
             toLegend :"Selected",
             fromLegend :"Available",
@@ -2560,7 +2823,7 @@ function createCustomizeImport(){
                     if(fileUploadPanel2.getForm().isValid()){
                             fileUploadPanel2.getForm().submit({
                                 url: 'do?action=import',
-                                waitMsg: 'Uploading your file...',
+                                waitMsg: 'Importing...',
                                 success: function(result, request){
                                    
                                     alert("Success"+csvseparator+fileencoding);
