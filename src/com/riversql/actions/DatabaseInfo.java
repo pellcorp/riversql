@@ -122,10 +122,9 @@ public class DatabaseInfo extends JSONDispatchAction {
 
         for(int i=0;i<tableList.size();i++)
         {
-            JSONObject tablenameObject = new JSONObject();
-            tablenameObject.put("tablename", tableList.get(i).getName());
-
-            tablesNameList.put(tablenameObject);
+            JSONObject tablename=new JSONObject();
+            tablename.put("tablename", tableList.get(i).getName());
+            tablesNameList.put(tablename);
         }
         return tablesNameList;
     }

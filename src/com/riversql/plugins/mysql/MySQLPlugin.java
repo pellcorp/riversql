@@ -102,6 +102,24 @@ public class MySQLPlugin implements Plugin {
 				obj.put("icons/database_add.png");
 				obj.put("mysql_createDatabase(menuTreeC.nodeid.id)");
 				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Import...");
+				obj.put("icons/database_add.png");
+				obj.put("createCustomizeImport()");
+				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Export...");
+				obj.put("icons/database_add.png");
+				obj.put("createCustomizeExport()");
+				ls.add(obj);
+
+                                obj=new JSONArray();
+				obj.put("Processes...");
+				obj.put("icons/database_add.png");
+				obj.put("processList()");
+				ls.add(obj);
 			}
                         else if("tbs".equals(nodeType)){
 				JSONArray obj=new JSONArray();

@@ -7,7 +7,7 @@
 		<img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Data Sources</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createCustomizeExport()">Export</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createCustomizeImport()">Import</a><br/>
-                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Processes</a><br/>
+                <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="processList()">Processes</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Synchronize(Data Move)</a><br/>
                 <img src="icons/transmit.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createDataSourcesPage()">Query Builder</a><br/>
 		<img src="icons/cog.png" style="width:16px;height:16px;vertical-align:middle"/>&nbsp;&nbsp;<a class="page" href="#" onclick="createConfigurationPage()">Configuration</a><br/>
