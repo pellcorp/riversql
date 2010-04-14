@@ -1,18 +1,27 @@
 <project name="riversql" default="js.minify" basedir=".">
-	
+
+    <path id="classpath">
+        <pathelement location="WEB-INF/classes/"/>
+
+        <pathelement path="/lib/tools.jar"/>
+        <pathelement path="WEB-INF/lib/commons-beanutils-1.6.1.jar"/>
+        <pathelement path="WEB-INF/lib/commons-collections-3.2.jar"/>
+        <pathelement path="WEB-INF/lib/commons-fileupload-1.2.jar"/>
+        <pathelement path="WEB-INF/lib/commons-io-1.4.jar"/>
+        <pathelement path="WEB-INF/lib/commons-logging-1.1.jar"/>
+        <pathelement path="WEB-INF/lib/iText-5.0.1.jar"/>
+        <pathelement path="WEB-INF/lib/log4j.jar"/>
+        <pathelement path="WEB-INF/lib/poi-3.5-FINAL-20090928.jar"/>
+        <pathelement path="WEB-INF/lib/toplink-essentials.jar"/>
+        <pathelement path="WEB-INF/lib/servlet-api.jar"/>
+        <pathelement path="WEB-INF/lib/proguard.jar"/>
+    </path>
+
+        <target name="init">
+            <mkdir dir="WEB-INF/classes"/>
+        </target>
 		
 	<target name="js.minify" >
-	    <!-- <apply executable="java" parallel="false">
-	        <fileset dir="." includes="shBrushSql.js,shCore.js,dwloader.js"/>
-	        <arg line="-jar"/>
-	        <arg path="yuicompressor-2.4.2.jar"/>
-	        <srcfile/>
-	        <arg line="-o"/>
-	        <mapper type="glob" from="*.js" to="build/*-min.js"/>
-	        <targetfile/>
-	    </apply> -->
-		
-		
 		
 		<concat destfile="build/draw_all.js"
 		          force="yes">
@@ -84,10 +93,77 @@
 		</apply>
 		
 	</target>
+
+        <target name="build" depends="init,js.minify,css.minify"> <!-- depends="init" -->
+            <javac srcdir="../src/" destdir="WEB-INF/classes">
+                <classpath refid="classpath"/>
+            </javac>
+        </target>
+
+        <target name="jars" depends="build">
+            <jar basedir="WEB-INF/classes" jarfile="WEB-INF/lib/riversqlsource.jar"/>
+            <delete dir="WEB-INF/classes" failonerror="false" />
+        </target>
+
+        <target name="obfuscate">
+          <taskdef resource="proguard/ant/task.properties"
+                   classpath="WEB-INF/lib/proguard.jar" />
+
+          <proguard printseeds="on">
+            <injar  file="WEB-INF/lib/riversqlsource.jar" />
+            <outjar file="WEB-INF/lib/riversql.jar" />
+
+            <libraryjar file="../lib/" />
+            <libraryjar file="WEB-INF/lib/" />
+
+            <keep access="public" implements="javax.servlet.Servlet" />
+            <keep access="public" implements="javax.servlet.Filter" />
+            <keep access="public" implements="javax.servlet.ServletContextListener" />
+
+            <keepattribute name="*Annotation*" />
+            <keepclasseswithmembernames>
+              <method access="native" />
+            </keepclasseswithmembernames>
+            <keepclassmembers extends="java.lang.Enum">
+              <method access="public static"
+                      type="**[]"
+                      name="values"
+                      parameters="" />
+              <method access="public static"
+                      type="**"
+                      name="valueOf"
+                      parameters="java.lang.String" />
+            </keepclassmembers>
+            <keepclassmembers implements="java.io.Serializable">
+              <field  access    ="static final"
+                      type      ="long"
+                      name      ="serialVersionUID" />
+              <field  access    ="static final"
+                      type      ="java.io.ObjectStreamField[]"
+                      name      ="serialPersistentFields" />
+              <method access    ="private"
+                      type      ="void"
+                      name      ="writeObject"
+                      parameters="java.io.ObjectOutputStream" />
+              <method access    ="private"
+                      type      ="void"
+                      name      ="readObject"
+                      parameters="java.io.ObjectInputStream" />
+              <method type      ="java.lang.Object"
+                      name      ="writeReplace"
+                      parameters="" />
+              <method type      ="java.lang.Object"
+                      name      ="readResolve"
+                      parameters="" />
+            </keepclassmembers>
+          </proguard>
+        </target>
+
 	
-	 <target name="war" description="Building the war file">
-		  <war destfile="c:/temp/riversql.war" webxml="WEB-INF/web.xml"> 
-	         <fileset dir=""/>
-	      </war>
-	  </target>
+        <target name="war" description="Building the war file"  depends="jars,obfuscate">
+            <delete dir="WEB-INF/lib/riversqlsource.jar" failonerror="false" />
+            <war destfile="../war/riversql.war" webxml="WEB-INF/web.xml">
+                <fileset dir=""/>
+            </war>
+        </target>
 </project>
