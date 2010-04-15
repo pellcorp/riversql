@@ -2,7 +2,7 @@
 package com.riversql.databases;
 
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 public class DBSyntaxGeneratorFactory {
 	private DBSyntaxGeneratorFactory(){}

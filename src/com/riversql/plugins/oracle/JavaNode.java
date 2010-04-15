@@ -2,7 +2,7 @@
 package com.riversql.plugins.oracle;
 
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 public class JavaNode extends com.riversql.plugin.BasePluginType {
 

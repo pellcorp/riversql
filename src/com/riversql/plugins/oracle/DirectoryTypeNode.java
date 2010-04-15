@@ -4,11 +4,12 @@ package com.riversql.plugins.oracle;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import com.riversql.dbtree.IStructureNode;
 import com.riversql.dbtree.SchemaNode;
+import com.riversql.plugin.BasePluginType;
 
-public class DirectoryTypeNode extends com.riversql.plugin.BasePluginType implements IStructureNode{
+public class DirectoryTypeNode extends BasePluginType implements IStructureNode{
 
 	
 	 

@@ -80,7 +80,8 @@ public abstract class DoServlet extends HttpServlet {
         try {
             execute(req, resp, em, et);
         } catch (Exception ex) {
-            Logger.getLogger(DoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(DoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.toString());
         }
     }
 	

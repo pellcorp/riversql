@@ -21,7 +21,7 @@ import com.riversql.dbtree.IStructureNode;
 import com.riversql.dbtree.SQLSession;
 import com.riversql.dbtree.TableNode;
 import com.riversql.dbtree.TablesNode;
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 
 

@@ -4,7 +4,7 @@ package com.riversql.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 import org.json.JSONArray;
 

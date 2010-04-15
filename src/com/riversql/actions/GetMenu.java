@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.riversql.JSONAction;
+import com.riversql.plugin.PluginManager;
 
 
 
@@ -111,7 +112,7 @@ public class GetMenu implements JSONAction {
                         obj.put("newEditor('CREATE VIEW view_name AS \\n ');");
 			arr.put(obj);
 		}
-		com.riversql.plugin.PluginManager.getInstance().loadAddedMenu(arr,sessionid,nodeType);
+		PluginManager.getInstance().loadAddedMenu(arr,sessionid,nodeType);
 		obj_.put("menu", arr);
 		return obj_;
 	}

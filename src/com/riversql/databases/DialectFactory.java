@@ -1,8 +1,8 @@
 
 package com.riversql.databases;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
-import net.sourceforge.squirrel_sql.fw.sql.SQLDatabaseMetaData;
+import com.riversql.sql.SQLConnection;
+import com.riversql.sql.SQLDatabaseMetaData;
 
 
 public class DialectFactory {

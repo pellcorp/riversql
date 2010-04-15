@@ -8,9 +8,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.squirrel_sql.fw.sql.ITableInfo;
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
-import net.sourceforge.squirrel_sql.fw.sql.TableColumnInfo;
+import com.riversql.sql.ITableInfo;
+import com.riversql.sql.SQLConnection;
+import com.riversql.sql.TableColumnInfo;
 
 public class TableNode extends DBNode implements IStructureNode{
 

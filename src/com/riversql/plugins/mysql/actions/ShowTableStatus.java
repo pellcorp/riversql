@@ -1,7 +1,7 @@
 
 package com.riversql.plugins.mysql.actions;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import com.riversql.dbtree.CatalogNode;
 
 public class ShowTableStatus extends Show {

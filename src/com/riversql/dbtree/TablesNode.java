@@ -3,8 +3,8 @@ package com.riversql.dbtree;
 
 import java.sql.SQLException;
 
-import net.sourceforge.squirrel_sql.fw.sql.ITableInfo;
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.ITableInfo;
+import com.riversql.sql.SQLConnection;
 
 public class TablesNode extends DBNode implements IStructureNode{
 

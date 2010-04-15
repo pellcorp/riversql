@@ -3,7 +3,7 @@ package com.riversql.plugins.mysql.actions;
 
 import java.sql.PreparedStatement;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 import org.json.JSONObject;
 

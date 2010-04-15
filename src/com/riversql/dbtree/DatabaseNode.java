@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
-import net.sourceforge.squirrel_sql.fw.sql.SQLDatabaseMetaData;
-import net.sourceforge.squirrel_sql.fw.sql.SQLDatabaseMetaData.IDBMSProductNames;
+import com.riversql.sql.SQLConnection;
+import com.riversql.sql.SQLDatabaseMetaData;
+import com.riversql.sql.SQLDatabaseMetaData.IDBMSProductNames;
 
 import org.json.JSONArray;
 import org.json.JSONException;

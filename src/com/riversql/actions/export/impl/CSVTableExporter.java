@@ -247,7 +247,7 @@ public class CSVTableExporter implements ITableExporter {
             try {
                 baos.write(sb.toString().getBytes());
             } catch (IOException ex) {
-                Logger.getLogger(CSVTableExporter.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(CSVTableExporter.class.getName()).log(Level.SEVERE, null, ex);
             }
             sb=null;
 	}

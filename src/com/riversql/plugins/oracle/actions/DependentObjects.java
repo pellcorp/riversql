@@ -4,7 +4,7 @@ package com.riversql.plugins.oracle.actions;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
