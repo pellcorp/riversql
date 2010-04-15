@@ -2,7 +2,7 @@
 package com.riversql.dbtree;
 
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import com.riversql.IDManager;
 
 public class SQLSession {

@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sourceforge.squirrel_sql.fw.sql.DataTypeInfo;
+import com.riversql.sql.DataTypeInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

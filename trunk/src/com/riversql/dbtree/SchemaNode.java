@@ -3,7 +3,7 @@ package com.riversql.dbtree;
 
 import java.sql.SQLException;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import com.riversql.plugin.PluginManager;
 
 public class SchemaNode extends DBNode implements IStructureNode{

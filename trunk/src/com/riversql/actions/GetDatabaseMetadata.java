@@ -10,7 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLDatabaseMetaData;
+import com.riversql.sql.SQLDatabaseMetaData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

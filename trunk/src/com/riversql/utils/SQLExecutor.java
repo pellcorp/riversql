@@ -7,7 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;

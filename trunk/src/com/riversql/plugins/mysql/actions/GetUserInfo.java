@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

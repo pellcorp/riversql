@@ -9,8 +9,9 @@ import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sourceforge.squirrel_sql.fw.sql.ISQLDriver;
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.ISQLDriver;
+import com.riversql.sql.SQLConnection;
+import com.riversql.sql.SQLDriver;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,7 +25,6 @@ import com.riversql.dbtree.SQLSession;
 import com.riversql.entities.Driver;
 import com.riversql.entities.Source;
 import com.riversql.plugin.PluginManager;
-
 
 public class Connect implements JSONAction {
     String user,password;
@@ -52,28 +52,26 @@ public class Connect implements JSONAction {
                     throws Exception {
         Driver driver=DriversDAO.getDriver(em,driverid);
         Source source=SourcesDAO.getSource(em,sourceid);
-
-        ISQLDriver idriver=new net.sourceforge.squirrel_sql.fw.sql.SQLDriver();
-
+        ISQLDriver idriver=new SQLDriver();
 
         JSONObject obj=new JSONObject();
 
-            Class.forName(driver.getDriverClassName());
-            idriver.setDriverClassName(driver.getDriverClassName());
-            Connection _conn = DriverManager.getConnection(source.getJdbcUrl(),user,password);
-            if(autocommit!=null){
-                    _conn.setAutoCommit(true);
-            }else{
-                    _conn.setAutoCommit(false);
-            }
-            SQLConnection conn=new SQLConnection(_conn,null,idriver);
-            //sessions.getSqlsessions().add(new SQLSession(source.getSourceName(),conn));
-            WebSQLSession sessions=(WebSQLSession)request.getSession(true).getAttribute("sessions");
-            sessions.getSqlsessions().add(new SQLSession(sourceid,source.getSourceName()+" ("+IDManager.get().nextSessionID()+")",conn));
-            obj.put("success",true);
-            JSONArray arr=new JSONArray();
-            PluginManager.getInstance().dynamicPluginScripts(arr, conn);
-            obj.put("pluginScripts", arr);
+        Class.forName(driver.getDriverClassName());
+        idriver.setDriverClassName(driver.getDriverClassName());
+        Connection _conn = DriverManager.getConnection(source.getJdbcUrl(),user,password);
+        if(autocommit!=null){
+                _conn.setAutoCommit(true);
+        }else{
+                _conn.setAutoCommit(false);
+        }
+        SQLConnection conn=new SQLConnection(_conn,null,idriver);
+        //sessions.getSqlsessions().add(new SQLSession(source.getSourceName(),conn));
+        WebSQLSession sessions=(WebSQLSession)request.getSession(true).getAttribute("sessions");
+        sessions.getSqlsessions().add(new SQLSession(sourceid,source.getSourceName()+" ("+IDManager.get().nextSessionID()+")",conn));
+        obj.put("success",true);
+        JSONArray arr=new JSONArray();
+        PluginManager.getInstance().dynamicPluginScripts(arr, conn);
+        obj.put("pluginScripts", arr);
 
         return obj;
     }

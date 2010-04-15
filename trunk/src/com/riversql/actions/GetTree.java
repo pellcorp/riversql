@@ -94,7 +94,7 @@ public class GetTree implements JSONAction {
 //		ClassLoader lod=Thread.currentThread().getContextClassLoader();
 //		try{
 //			Class.forName(driverName);
-//			ISQLDriver idriver=new net.sourceforge.squirrel_sql.fw.sql.SQLDriver();
+//			ISQLDriver idriver=new com.riversql.sql.SQLDriver();
 //			idriver.setDriverClassName(driverName);
 //			Connection _conn = DriverManager.getConnection(url,user,pwd);
 //			SQLConnection conn=new SQLConnection(_conn,null,idriver);

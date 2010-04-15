@@ -4,7 +4,7 @@ package com.riversql.plugins.mysql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import net.sourceforge.squirrel_sql.fw.sql.SQLConnection;
+import com.riversql.sql.SQLConnection;
 import com.riversql.dbtree.CatalogNode;
 import com.riversql.dbtree.IStructureNode;
 import com.riversql.plugin.BasePluginType;
