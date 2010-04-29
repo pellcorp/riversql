@@ -1,1 +1,1 @@
-Tomcat 6.0
+Required Tomcat 6.0
