@@ -3,7 +3,7 @@
     <path id="classpath">
         <pathelement location="WEB-INF/classes/"/>
 
-        <pathelement path="/lib/tools.jar"/>
+        <pathelement path="../lib/tools.jar"/>
         <pathelement path="WEB-INF/lib/commons-beanutils-1.6.1.jar"/>
         <pathelement path="WEB-INF/lib/commons-collections-3.2.jar"/>
         <pathelement path="WEB-INF/lib/commons-fileupload-1.2.jar"/>
@@ -15,10 +15,13 @@
         <pathelement path="WEB-INF/lib/toplink-essentials.jar"/>
         <pathelement path="WEB-INF/lib/servlet-api.jar"/>
         <pathelement path="WEB-INF/lib/proguard.jar"/>
+        <pathelement path="WEB-INF/lib/dao.jar"/>
     </path>
 
         <target name="init">
             <mkdir dir="WEB-INF/classes"/>
+            <mkdir dir="WEB-INF/src"/>
+
         </target>
 		
 	<target name="js.minify" >
@@ -95,14 +98,65 @@
 	</target>
 
         <target name="build" depends="init,js.minify,css.minify"> <!-- depends="init" -->
-            <javac srcdir="../src/" destdir="WEB-INF/classes">
+            <mkdir dir="WEB-INF/src/org"/>
+            <mkdir dir="WEB-INF/src/com"/>
+            <!--
+            <copy todir="WEB-INF/src/com/riversql/entities">
+                <fileset dir="../src/comriversql/entities" />
+            </copy>
+            <copy todir="WEB-INF/src/com/riversql/dao">
+                <fileset dir="../src/comriversql/dao" />
+            </copy>
+						-->
+            
+            
+            <copy todir="WEB-INF/src/org">
+                <fileset dir="../src/org"/>
+            </copy>
+            <copy todir="WEB-INF/src/com">
+                <fileset dir="../src/com"/>
+            </copy>
+            
+            <mkdir dir="WEB-INF/src/com/riversql/entities"/>
+            <mkdir dir="WEB-INF/src/com/riversql/dao"/>
+            <mkdir dir="WEB-INF/classes/com/riversql/entities"/>
+            <mkdir dir="WEB-INF/classes/com/riversql/dao"/>
+            <javac srcdir="WEB-INF/src/com/riversql/entities" destdir="WEB-INF/classes/">
                 <classpath refid="classpath"/>
             </javac>
+            <javac srcdir="WEB-INF/src/com/riversql/dao" destdir="WEB-INF/classes/">
+                <classpath refid="classpath"/>
+            </javac>
+            <jar basedir="WEB-INF/classes" jarfile="WEB-INF/lib/dao.jar"/>
+            <delete dir="WEB-INF/src/com/riversql/entities" failonerror="false" />
+            <delete dir="WEB-INF/src/com/riversql/dao" failonerror="false" />
+            <delete dir="WEB-INF/classes/com/riversql/entities" failonerror="false" />
+            <delete dir="WEB-INF/classes/com/riversql/dao" failonerror="false" />
+            
+
+            <javac srcdir="WEB-INF/src/" destdir="WEB-INF/classes/">
+                <classpath refid="classpath"/>
+            </javac>
+
+            <copy todir="WEB-INF/classes/com/riversql/sql" file="WEB-INF/src/com/riversql/sql/I18NStrings.properties" />
+            <copy todir="WEB-INF/classes/com/riversql/util" file="WEB-INF/src/com/riversql/util/I18NStrings.properties" />
+            
+            <jar basedir="WEB-INF/classes" jarfile="WEB-INF/lib/riversqlsource.jar"/>
+            <delete dir="WEB-INF/src/" failonerror="false" />
+            
+            <delete dir="WEB-INF/classes/org" failonerror="false" />
+            <delete dir="WEB-INF/classes/com" failonerror="false" />
+            
+            <copy todir="WEB-INF/classes/" file="../src/log4j.properties" />
+            <copy todir="WEB-INF/classes/META-INF/">
+                <fileset dir="../src/META-INF/"/>
+            </copy>
         </target>
 
         <target name="jars" depends="build">
             <jar basedir="WEB-INF/classes" jarfile="WEB-INF/lib/riversqlsource.jar"/>
             <delete dir="WEB-INF/classes" failonerror="false" />
+            <delete dir="WEB-INF/src" failonerror="false" />
         </target>
 
         <target name="obfuscate">
@@ -113,13 +167,66 @@
             <injar  file="WEB-INF/lib/riversqlsource.jar" />
             <outjar file="WEB-INF/lib/riversql.jar" />
 
-            <libraryjar file="../lib/" />
-            <libraryjar file="WEB-INF/lib/" />
+            <libraryjar file="../lib/rt.jar"/>
+            <libraryjar file="../lib/tools.jar"/>
+            <libraryjar file="WEB-INF/lib/commons-beanutils-1.6.1.jar"/>
+            <libraryjar file="WEB-INF/lib/commons-collections-3.2.jar"/>
+            <libraryjar file="WEB-INF/lib/commons-fileupload-1.2.jar"/>
+            <libraryjar file="WEB-INF/lib/commons-io-1.4.jar"/>
+            <libraryjar file="WEB-INF/lib/commons-logging-1.1.jar"/>
+            <libraryjar file="WEB-INF/lib/iText-5.0.1.jar"/>
+            <libraryjar file="WEB-INF/lib/log4j.jar"/>
+            <libraryjar file="WEB-INF/lib/poi-3.5-FINAL-20090928.jar"/>
+            <libraryjar file="WEB-INF/lib/toplink-essentials.jar"/>
+            <libraryjar file="WEB-INF/lib/servlet-api.jar"/>
+            <libraryjar file="WEB-INF/lib/dao.jar"/>
+            <libraryjar file="WEB-INF/lib/proguard.jar"/>
 
             <keep access="public" implements="javax.servlet.Servlet" />
             <keep access="public" implements="javax.servlet.Filter" />
             <keep access="public" implements="javax.servlet.ServletContextListener" />
+            <keep access="public" implements="javax.servlet.http.HttpSessionListener" />
+            <keep access="public" implements="javax.servlet.ServletOutputStream" />
+            <keep access="public" implements="javax.servlet.http.HttpServletResponseWrapper" />
+            <keep access="public" implements="javax.servlet.http.HttpServletResponse" />
+            <keep access="public" implements="java.io.Serializable" />
+            <keep access="public" implements="com.riversql.IPageAction" >
+            		<method access="public" />
+            </keep>
+            <keep access="public" implements="com.riversql.JSONAction" >
+            		<method access="public" />
+            </keep>
+            <keep access="public" implements="com.riversql.IFileUploadAction" >
+            		<method access="public" />
+            </keep>
+            
+            <!--
+            <keep access="public" name="com.riversql.entities.*" >
+                <method access="public" />
+            </keep>
+            <keep access="public" name="com.riversql.dao.*" >
+                <method access="public" />
+            </keep>
+            -->
+            <!--
+            <keepdirectory name="com/riversql/entities/*.class" />
+            <keep access="public" name="org.apache.*" />
+            <keep access="public" name="org.json.*" />
+            <keep access="public" name="com.riversql.*" />
+            -->
 
+						<!--
+            <keepattribute name="NamedQueries" />
+            <keepattribute name="NamedQuery" />
+            <keepattribute name="Entity" />
+            <keepattribute name="Table" />
+            <keepattribute name="Column" />
+            <keepattribute name="Id" />
+            <keepattribute name="GeneratedValue" />
+            <keepattribute name="Version" />
+            <keepattribute name="Temporal" />
+						-->
+						
             <keepattribute name="*Annotation*" />
             <keepclasseswithmembernames>
               <method access="native" />
@@ -134,6 +241,7 @@
                       name="valueOf"
                       parameters="java.lang.String" />
             </keepclassmembers>
+            <!--
             <keepclassmembers implements="java.io.Serializable">
               <field  access    ="static final"
                       type      ="long"
@@ -156,12 +264,13 @@
                       name      ="readResolve"
                       parameters="" />
             </keepclassmembers>
+            -->
           </proguard>
         </target>
 
 	
-        <target name="war" description="Building the war file"  depends="jars,obfuscate">
-            <delete dir="WEB-INF/lib/riversqlsource.jar" failonerror="false" />
+        <target name="war" description="Building the war file"  depends="build,obfuscate">
+            <delete file="WEB-INF/lib/riversqlsource.jar" failonerror="false" />
             <war destfile="../war/riversql.war" webxml="WEB-INF/web.xml">
                 <fileset dir=""/>
             </war>
