@@ -1,0 +1,1 @@
+based on phpmyadmin function, we want to build an similar application to run on db2/mysql/mssql using j2ee
